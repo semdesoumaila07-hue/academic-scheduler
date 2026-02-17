@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Configuration des calendriers académiques : jours fériés et périodes de vacances.
+  Utilisé pour l'import dans l'application (onglet Calendrier).
+  Types de vacances : NOEL, PAQUES, ETE, TOUSSAINT
+  recurrent : true = le jour férié s'applique chaque année (même jour/mois)
+-->
+<calendriers>
+  <calendrier>
+    <nom>Calendrier académique 2025-2026</nom>
+    <annee_academique>2025-2026</annee_academique>
+    <date_debut>2025-10-01</date_debut>
+    <date_fin>2026-06-30</date_fin>
+    <heures_par_jour>8</heures_par_jour>
+    <nombre_semestres>2</nombre_semestres>
+    <jours_feries>
+      <jour_ferie>
+        <nom>Nouvel An</nom>
+        <date>2026-01-01</date>
+        <recurrent>true</recurrent>
+        <description>Jour de l'an</description>
+      </jour_ferie>
+      <jour_ferie>
+        <nom>Fête du 3 janvier</nom>
+        <date>2026-01-03</date>
+        <recurrent>true</recurrent>
+        <description>Commémoration</description>
+      </jour_ferie>
+      <jour_ferie>
+        <nom>Fête de la Révolution</nom>
+        <date>2026-01-04</date>
+        <recurrent>true</recurrent>
+        <description>Anniversaire de la révolution</description>
+      </jour_ferie>
+      <jour_ferie>
+        <nom>Fête des Femmes</nom>
+        <date>2026-03-08</date>
+        <recurrent>true</recurrent>
+        <description>Journée internationale des droits des femmes</description>
+      </jour_ferie>
+      <jour_ferie>
+        <nom>Fête du Travail</nom>
+        <date>2026-05-01</date>
+        <recurrent>true</recurrent>
+        <description>1er mai</description>
+      </jour_ferie>
+      <jour_ferie>
+        <nom>Fête nationale</nom>
+        <date>2025-12-11</date>
+        <recurrent>true</recurrent>
+        <description>Proclamation de la République</description>
+      </jour_ferie>
+      <jour_ferie>
+        <nom>Noël</nom>
+        <date>2025-12-25</date>
+        <recurrent>true</recurrent>
+        <description>Fête de Noël</description>
+      </jour_ferie>
+    </jours_feries>
+    <periodes_vacances>
+      <periode>
+        <nom>Vacances de Toussaint</nom>
+        <date_debut>2025-10-30</date_debut>
+        <date_fin>2025-11-03</date_fin>
+        <type>TOUSSAINT</type>
+        <description>Congé de la Toussaint</description>
+      </periode>
+      <periode>
+        <nom>Vacances de Noël</nom>
+        <date_debut>2025-12-20</date_debut>
+        <date_fin>2026-01-05</date_fin>
+        <type>NOEL</type>
+        <description>Vacances de fin d'année</description>
+      </periode>
+      <periode>
+        <nom>Vacances de Pâques</nom>
+        <date_debut>2026-03-28</date_debut>
+        <date_fin>2026-04-12</date_fin>
+        <type>PAQUES</type>
+        <description>Vacances de Pâques</description>
+      </periode>
+    </periodes_vacances>
+  </calendrier>
+</calendriers>

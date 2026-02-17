@@ -1,0 +1,154 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.0 Chrome/140.0.7339.249 Electron/38.7.2 Safari/537.36" version="29.3.0">
+  <diagram name="Cas d&#39;Utilisation - Corrige" id="use-case-diagram">
+    <mxGraphModel dx="1737" dy="1043" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" value="Diagramme de Cas d&#39;Utilisation - Systeme Ordonnancement Academique P-equitable" vertex="1">
+          <mxGeometry height="30" width="600" x="284.5" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="system-boundary" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=14;fontStyle=1;startSize=40;" value="Systeme Ordonnancement Academique" vertex="1">
+          <mxGeometry height="680" width="690" x="260" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="uc1" parent="system-boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="UC1: Configurer structure universitaire" vertex="1">
+          <mxGeometry height="70" width="140" x="150" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="uc2" parent="system-boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="UC2: Configurer calendrier academique" vertex="1">
+          <mxGeometry height="70" width="140" x="345" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="uc3" parent="system-boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="UC3: Gerer activites academiques" vertex="1">
+          <mxGeometry height="70" width="140" x="160" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="uc4" parent="system-boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="UC4: Declarer disponibilites" vertex="1">
+          <mxGeometry height="70" width="140" x="160" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="uc5" parent="system-boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" value="UC5: Lancer ordonnancement Pfair" vertex="1">
+          <mxGeometry height="70" width="140" x="340" y="326" as="geometry" />
+        </mxCell>
+        <mxCell id="uc6" parent="system-boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="UC6: Consulter emplois du temps" vertex="1">
+          <mxGeometry height="70" width="140" x="510" y="396" as="geometry" />
+        </mxCell>
+        <mxCell id="uc7" parent="system-boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="UC7: Consulter retards academiques" vertex="1">
+          <mxGeometry height="70" width="140" x="510" y="276" as="geometry" />
+        </mxCell>
+        <mxCell id="uc8" parent="system-boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="UC8: Generer rapports" vertex="1">
+          <mxGeometry height="70" width="140" x="500" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="uc9" parent="system-boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="UC9: Soumettre demande de conges" vertex="1">
+          <mxGeometry height="70" width="140" x="340" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="uc10" parent="system-boundary" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="UC10: Approuver demandes de conges" vertex="1">
+          <mxGeometry height="70" width="140" x="340" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="include1" edge="1" parent="system-boundary" source="uc2" style="edgeStyle=none;html=1;endArrow=open;endFill=0;dashed=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#666666;" target="uc5" value="&lt;&lt;include&gt;&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="include2" edge="1" parent="system-boundary" source="uc5" style="edgeStyle=none;html=1;endArrow=open;endFill=0;dashed=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#666666;" target="uc10" value="&lt;&lt;include&gt;&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="include3" edge="1" parent="system-boundary" source="uc9" style="edgeStyle=none;html=1;endArrow=open;endFill=0;dashed=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;strokeColor=#666666;" target="uc10" value="&lt;&lt;include&gt;&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-admin" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Administrateur Academique" vertex="1">
+          <mxGeometry height="80" width="40" x="80" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-resp" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" value="Responsable Pedagogique" vertex="1">
+          <mxGeometry height="80" width="40" x="80" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-teacher" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#fff2cc;strokeColor=#d6b656;" value="Enseignant" vertex="1">
+          <mxGeometry height="80" width="40" x="80" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-student" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f8cecc;strokeColor=#b85450;" value="Etudiant" vertex="1">
+          <mxGeometry height="80" width="40" x="1000" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="rel-admin-uc1" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;strokeColor=#6c8ebf;" target="uc1" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="500" y="400" as="sourcePoint" />
+            <mxPoint x="550" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-admin-uc2" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;strokeColor=#6c8ebf;" target="uc2" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="500" y="400" as="sourcePoint" />
+            <mxPoint x="550" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-admin-uc7" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0;strokeColor=#6c8ebf;" target="uc7" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="500" y="400" as="sourcePoint" />
+            <mxPoint x="550" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-admin-uc8" edge="1" parent="1" source="actor-admin" style="endArrow=none;html=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;strokeColor=#6c8ebf;" target="uc8" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="500" y="400" as="sourcePoint" />
+            <mxPoint x="550" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-resp-uc3" edge="1" parent="1" source="actor-resp" style="endArrow=none;html=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;strokeColor=#82b366;strokeWidth=2;" target="uc3" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="500" y="400" as="sourcePoint" />
+            <mxPoint x="550" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-resp-uc5" edge="1" parent="1" source="actor-resp" style="endArrow=none;html=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;strokeColor=#82b366;strokeWidth=2;" target="uc5" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="500" y="400" as="sourcePoint" />
+            <mxPoint x="550" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-resp-uc6" edge="1" parent="1" source="actor-resp" style="endArrow=none;html=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;strokeColor=#82b366;strokeWidth=2;" target="uc6" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="500" y="400" as="sourcePoint" />
+            <mxPoint x="550" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-resp-uc7" edge="1" parent="1" source="actor-resp" style="endArrow=none;html=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;strokeColor=#82b366;strokeWidth=2;" target="uc7" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="500" y="400" as="sourcePoint" />
+            <mxPoint x="550" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-resp-uc10" edge="1" parent="1" source="actor-resp" style="endArrow=none;html=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;strokeColor=#82b366;strokeWidth=2;" target="uc10" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="500" y="400" as="sourcePoint" />
+            <mxPoint x="550" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-teacher-uc4" edge="1" parent="1" source="actor-teacher" style="endArrow=none;html=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;strokeColor=#d6b656;" target="uc4" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="500" y="400" as="sourcePoint" />
+            <mxPoint x="550" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-teacher-uc6" edge="1" parent="1" source="actor-teacher" style="endArrow=none;html=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=1;strokeColor=#d6b656;" target="uc6" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="500" y="400" as="sourcePoint" />
+            <mxPoint x="550" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-teacher-uc9" edge="1" parent="1" source="actor-teacher" style="endArrow=none;html=1;exitX=1;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;strokeColor=#d6b656;" target="uc9" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="500" y="400" as="sourcePoint" />
+            <mxPoint x="550" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-student-uc6" edge="1" parent="1" source="actor-student" style="endArrow=none;html=1;exitX=0;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0.5;strokeColor=#b85450;" target="uc6" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="500" y="400" as="sourcePoint" />
+            <mxPoint x="550" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel-student-uc7" edge="1" parent="1" source="actor-student" style="endArrow=none;html=1;exitX=0;exitY=0.3;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0.5;strokeColor=#b85450;" target="uc7" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="500" y="400" as="sourcePoint" />
+            <mxPoint x="550" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend" parent="1" style="text;html=1;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;fontSize=11;fontColor=#333333;" value="Legende: Bleu=Admin, Vert=Resp.Peda.(PRINCIPAL), Jaune=Enseignant, Rouge=Etudiant" vertex="1">
+          <mxGeometry height="90" width="140" x="70" y="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

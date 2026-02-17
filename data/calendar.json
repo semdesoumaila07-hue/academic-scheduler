@@ -1,0 +1,89 @@
+{
+  "calendars": [
+    {
+      "id": 1,
+      "annee_academique": "2025-2026",
+      "heures_cours_par_jour": 8,
+      "semestre1_debut": "01/10/2025",
+      "semestre1_fin": "28/02/2026",
+      "semestre2_debut": "01/03/2026",
+      "semestre2_fin": "31/07/2026",
+      "jours_ouvrables": [
+        "Lundi",
+        "Mardi",
+        "Mercredi",
+        "Jeudi",
+        "Vendredi",
+        "Samedi"
+      ],
+      "d_effectif": 230,
+      "volume_horaire_total": 1840
+    },
+    {
+      "annee_academique": "2025-2026",
+      "heures_cours_par_jour": 8,
+      "semestre1_debut": "11/02/2026",
+      "semestre1_fin": "11/06/2026",
+      "semestre2_debut": "11/07/2026",
+      "semestre2_fin": "11/11/2026",
+      "jours_ouvrables": [
+        "Lundi",
+        "Mardi",
+        "Mercredi",
+        "Jeudi",
+        "Vendredi",
+        "Samedi"
+      ],
+      "d_effectif": 210,
+      "volume_horaire_total": 1680,
+      "date_creation": "2026-02-11T10:34:53.722194",
+      "id": 2
+    }
+  ],
+  "holidays": [
+    {
+      "id": 1,
+      "nom": "Jour de l'An",
+      "date": "01/01/2026",
+      "type": "National",
+      "recurrent": true
+    },
+    {
+      "id": 2,
+      "nom": "Fête du Travail",
+      "date": "01/05/2026",
+      "type": "National",
+      "recurrent": true
+    },
+    {
+      "id": 3,
+      "nom": "Fête Nationale",
+      "date": "05/08/2026",
+      "type": "National",
+      "recurrent": true
+    },
+    {
+      "id": 4,
+      "nom": "Noël",
+      "date": "25/12/2025",
+      "type": "Religieux",
+      "recurrent": true
+    }
+  ],
+  "vacations": [
+    {
+      "id": 1,
+      "nom": "Vacances de Noël",
+      "date_debut": "20/12/2025",
+      "date_fin": "05/01/2026",
+      "type": "Hiver"
+    },
+    {
+      "id": 2,
+      "nom": "Vacances de Pâques",
+      "date_debut": "10/04/2026",
+      "date_fin": "20/04/2026",
+      "type": "Printemps"
+    }
+  ]
+}

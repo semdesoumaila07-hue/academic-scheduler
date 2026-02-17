@@ -1,0 +1,113 @@
+{
+  "universites": [
+    {
+      "nom": "Université Nazi Boni",
+      "code": "UNB",
+      "ville": "Bobo Dioulasso",
+      "id": "univ_1_1770684750.612824"
+    },
+    {
+      "nom": "Université Norbert Zongo",
+      "code": "UNZ",
+      "ville": "KOUDOUGOU",
+      "id": "univ_2_1770687205.143324"
+    },
+    {
+      "nom": "Université Joseph Ki-ZERBO",
+      "code": "UJKZ",
+      "ville": "OUAGADOUGOU",
+      "id": "univ_3_1770725748.042004"
+    }
+  ],
+  "ufrs": [
+    {
+      "nom": "science des Ressource Humains",
+      "code": "LSH",
+      "directeur": "Dr SEMDE",
+      "universite_id": "univ_1_1770684750.612824",
+      "id": "ufr_1_1770684884.924754"
+    },
+    {
+      "nom": "Science et Technique",
+      "code": "UFR-ST",
+      "directeur": "Dr ZONGO",
+      "universite_id": "univ_2_1770687205.143324",
+      "id": "ufr_2_1770687299.745222"
+    },
+    {
+      "nom": "science et Technique",
+      "code": "UFR-ST",
+      "directeur": "Dr BATIONO",
+      "universite_id": "univ_3_1770725748.042004",
+      "id": "ufr_3_1770805478.355476"
+    }
+  ],
+  "programmes": [
+    {
+      "nom": "Lettre moderne",
+      "code": "LM",
+      "niveau": "Licence 1",
+      "ufr_id": "ufr_1_1770684884.924754",
+      "duree_annees": 4,
+      "id": "prog_1_1770684934.20542"
+    },
+    {
+      "nom": "INFORMATIQUE",
+      "code": "IN01",
+      "niveau": "Licence 3",
+      "ufr_id": "ufr_1_1770684884.924754",
+      "duree_annees": 4,
+      "id": "prog_2_1770687363.030121"
+    },
+    {
+      "nom": "Mathématique",
+      "code": "MATH",
+      "niveau": "Licence 2",
+      "ufr_id": "ufr_2_1770687299.745222",
+      "duree_annees": 5,
+      "id": "prog_3_1770725970.794701"
+    },
+    {
+      "nom": "Lingustine",
+      "code": "LING01",
+      "niveau": "Licence 2",
+      "ufr_id": "ufr_1_1770684884.924754",
+      "duree_annees": 3,
+      "id": "prog_4_1770805801.263997"
+    }
+  ],
+  "cohortes": [
+    {
+      "nom": "langue française",
+      "annee_academique": "2025-2026",
+      "semestre": "Semestre 1",
+      "programme_id": "prog_1_1770684934.20542",
+      "effectif": 45,
+      "id": "cohorte_1_1770685018.952173"
+    },
+    {
+      "nom": "L3 INFO",
+      "annee_academique": "2025-2026",
+      "semestre": "Semestre 2",
+      "programme_id": "prog_2_1770687363.030121",
+      "effectif": 122,
+      "id": "cohorte_2_1770687495.541329"
+    },
+    {
+      "nom": "L2 MATH",
+      "annee_academique": "2025-2026",
+      "semestre": "Semestre 2",
+      "programme_id": "prog_3_1770725970.794701",
+      "effectif": 38,
+      "id": "cohorte_3_1770726061.014862"
+    },
+    {
+      "nom": "Ling01",
+      "annee_academique": "2025-2026",
+      "semestre": "Semestre 1",
+      "programme_id": "prog_4_1770805801.263997",
+      "effectif": 45,
+      "id": "cohorte_4_1770805846.868385"
+    }
+  ]
+}

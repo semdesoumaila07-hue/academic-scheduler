@@ -1,0 +1,43 @@
+{
+  "demandes": [
+    {
+      "enseignant_id": 2,
+      "enseignant_nom": "TRAORE Moussa",
+      "type": "Congé maladie prévu",
+      "date_debut": "2026-02-11",
+      "date_fin": "2026-02-13",
+      "nb_jours": 3,
+      "justification": "maux de vendre",
+      "id": "leave_1_1770806168.956432",
+      "statut": "En attente",
+      "date_creation": "2026-02-11 10:36:08"
+    }
+  ],
+  "enseignants": [
+    {
+      "id": 1,
+      "nom": "KABORE",
+      "prenom": "Marie"
+    },
+    {
+      "id": 2,
+      "nom": "TRAORE",
+      "prenom": "Moussa"
+    },
+    {
+      "id": 3,
+      "nom": "SAWADOGO",
+      "prenom": "Fatimata"
+    },
+    {
+      "id": 4,
+      "nom": "OUATTARA",
+      "prenom": "Ibrahim"
+    },
+    {
+      "id": 5,
+      "nom": "ZONGO",
+      "prenom": "Aminata"
+    }
+  ]
+}

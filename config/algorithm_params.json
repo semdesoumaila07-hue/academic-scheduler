@@ -1,0 +1,132 @@
+{
+  "pfair": {
+    "name": "Algorithme Pfair (Proportionate Fair)",
+    "description": "Algorithme d'ordonnancement temps réel pour activités académiques",
+    "version": "1.0",
+    "parameters": {
+      "charge_factor_formula": "U(τi) = Ci / D_effectif",
+      "delay_formula": "lag(τi, t) = U(τi) × t - H(t)",
+      "alpha_formula": "α(τi, t) = lag(τi, t) / U(τi)",
+      "feasibility_condition": "U = Σ U(τi) ≤ 1.0"
+    },
+    "thresholds": {
+      "max_total_charge": 1.0,
+      "urgent_alpha": 1.0,
+      "important_alpha": 0.5,
+      "normal_alpha": 0.0,
+      "overload_warning": 0.9,
+      "critical_delay_hours": 10.0
+    },
+    "scheduling": {
+      "prioritize_urgent": true,
+      "sort_by_alpha": true,
+      "allow_rebalancing": true,
+      "max_iterations": 1000,
+      "slot_duration_hours": 2,
+      "max_slots_per_day": 4,
+      "min_slot_duration_hours": 1,
+      "max_slot_duration_hours": 4
+    },
+    "optimization": {
+      "minimize_delays": true,
+      "balance_workload": true,
+      "respect_teacher_limits": true,
+      "respect_cohort_limits": true,
+      "avoid_gaps": false,
+      "prefer_consecutive_slots": true
+    },
+    "constraints": {
+      "work_hours": {
+        "start": "08:00",
+        "end": "18:00"
+      },
+      "teacher_limits": {
+        "max_hours_per_day": 8,
+        "max_hours_per_week": 40,
+        "min_break_between_slots_minutes": 15
+      },
+      "cohort_limits": {
+        "max_hours_per_day": 8,
+        "max_consecutive_hours": 4,
+        "min_lunch_break_minutes": 60
+      },
+      "room_constraints": {
+        "respect_capacity": true,
+        "allow_room_sharing": false
+      }
+    },
+    "calendar": {
+      "exclude_weekends": true,
+      "exclude_holidays": true,
+      "exclude_vacations": true,
+      "effective_days_calculation": "workdays - holidays - vacations"
+    },
+    "conflict_resolution": {
+      "detect_conflicts": true,
+      "auto_resolve": false,
+      "priority_order": [
+        "teacher_conflicts",
+        "cohort_conflicts",
+        "room_conflicts"
+      ]
+    },
+    "performance": {
+      "enable_caching": true,
+      "cache_charge_factors": true,
+      "parallel_processing": false,
+      "max_processing_time_seconds": 300
+    }
+  },
+  "metrics": {
+    "track_delays": true,
+    "track_alpha_values": true,
+    "track_completion_rates": true,
+    "track_conflicts": true,
+    "generate_statistics": true,
+    "statistics_interval": "daily"
+  },
+  "validation": {
+    "validate_before_scheduling": true,
+    "check_feasibility": true,
+    "validate_constraints": true,
+    "strict_mode": false
+  },
+  "notifications": {
+    "notify_on_urgent_activities": true,
+    "notify_on_conflicts": true,
+    "notify_on_high_charge": true,
+    "urgent_delay_threshold_hours": 5.0
+  },
+  "advanced": {
+    "experimental_features": {
+      "enabled": false,
+      "adaptive_slot_duration": false,
+      "machine_learning_predictions": false,
+      "auto_teacher_assignment": false
+    },
+    "debug": {
+      "log_algorithm_steps": false,
+      "log_calculations": false,
+      "save_intermediate_results": false,
+      "verbose_mode": false
+    }
+  },
+  "defaults": {
+    "activity": {
+      "default_priority": 5,
+      "default_charge_factor": 0.1,
+      "default_status": "PENDING"
+    },
+    "schedule": {
+      "default_slot_duration": 2,
+      "default_room": "Non spécifiée",
+      "auto_assign_rooms": true
+    }
+  },
+  "limits": {
+    "max_activities_per_cohort": 50,
+    "max_teachers_per_activity": 1,
+    "max_cohorts_per_activity": 1,
+    "max_schedule_period_days": 365
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "slots": [
+    {
+      "role": "Étudiant",
+      "type_vue": "Classe",
+      "target": "L3 Info 2025-2026",
+      "date": "2026-02-11",
+      "start_hour": 8,
+      "duration_h": 2,
+      "label": "Algorithmique avancée (CM)\nSalle A101",
+      "color": "#DBEAFE"
+    },
+    {
+      "role": "Étudiant",
+      "type_vue": "Classe",
+      "target": "L3 Info 2025-2026",
+      "date": "2026-02-12",
+      "start_hour": 8,
+      "duration_h": 2,
+      "label": "TD Algorithmique (TD)\nSalle A101",
+      "color": "#DCFCE7"
+    },
+    {
+      "role": "Étudiant",
+      "type_vue": "Classe",
+      "target": "L3 Info 2025-2026",
+      "date": "2026-02-13",
+      "start_hour": 8,
+      "duration_h": 2,
+      "label": "Bases de données (CM)\nSalle A101",
+      "color": "#DBEAFE"
+    },
+    {
+      "role": "Étudiant",
+      "type_vue": "Classe",
+      "target": "L3 Info 2025-2026",
+      "date": "2026-02-14",
+      "start_hour": 8,
+      "duration_h": 2,
+      "label": "TP Bases de données (TP)\nSalle A101",
+      "color": "#FCE7F3"
+    },
+    {
+      "role": "Étudiant",
+      "type_vue": "Classe",
+      "target": "L3 Info 2025-2026",
+      "date": "2026-02-15",
+      "start_hour": 8,
+      "duration_h": 2,
+      "label": "Réseaux informatiques (CM)\nSalle A101",
+      "color": "#DBEAFE"
+    },
+    {
+      "role": "Étudiant",
+      "type_vue": "Classe",
+      "target": "L3 Info 2025-2026",
+      "date": "2026-02-16",
+      "start_hour": 8,
+      "duration_h": 2,
+      "label": "Développement Web (CM)\nSalle A101",
+      "color": "#DBEAFE"
+    }
+  ]
+}
