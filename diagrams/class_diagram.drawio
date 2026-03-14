@@ -1,0 +1,294 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.0 Chrome/140.0.7339.249 Electron/38.7.2 Safari/537.36" version="29.3.0">
+  <diagram name="DiagrammeClasses" id="DC">
+    <mxGraphModel dx="1469" dy="873" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="titre" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" value="Diagramme de Classes Métier - Modèle du Domaine (Corrigé)" vertex="1">
+          <mxGeometry height="30" width="800" x="200" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="universite" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;&lt;entity&gt;&gt;&#xa;Université" vertex="1">
+          <mxGeometry height="130" width="200" x="80" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="universite_attr" parent="universite" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="- id: int&#xa;- nom: string&#xa;- code: string&#xa;- adresse: string&#xa;- ville: string" vertex="1">
+          <mxGeometry height="60" width="200" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="universite_line" parent="universite" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" value="" vertex="1">
+          <mxGeometry height="8" width="200" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="universite_methods" parent="universite" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="+ ajouterUFR(): void" vertex="1">
+          <mxGeometry height="22" width="200" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="ufr" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" value="&lt;&lt;entity&gt;&gt;&#xa;UFR" vertex="1">
+          <mxGeometry height="140" width="200" x="360" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="ufr_attr" parent="ufr" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="- id: int&#xa;- nom: string&#xa;- code: string&#xa;- directeur: string" vertex="1">
+          <mxGeometry height="70" width="200" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ufr_line" parent="ufr" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" value="" vertex="1">
+          <mxGeometry height="8" width="200" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="ufr_methods" parent="ufr" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="+ ajouterParcours(): void" vertex="1">
+          <mxGeometry height="22" width="200" y="118" as="geometry" />
+        </mxCell>
+        <mxCell id="parcours" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;&lt;entity&gt;&gt;&#xa;Parcours" vertex="1">
+          <mxGeometry height="150" width="200" x="680" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="parcours_attr" parent="parcours" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="- id: int&#xa;- nom: string&#xa;- code: string&#xa;- niveau: enum&#xa;- durée_années: int" vertex="1">
+          <mxGeometry height="80" width="200" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="parcours_line" parent="parcours" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" value="" vertex="1">
+          <mxGeometry height="8" width="200" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="parcours_methods" parent="parcours" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="+ ajouterClasse(): void" vertex="1">
+          <mxGeometry height="22" width="200" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="classe" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" value="&lt;&lt;entity&gt;&gt;&#xa;Classe (Promotion)" vertex="1">
+          <mxGeometry height="150" width="220" x="670" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="classe_attr" parent="classe" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="- id: int&#xa;- nom: string&#xa;- semestre: int&#xa;- effectif: int&#xa;- dates: DateRange" vertex="1">
+          <mxGeometry height="80" width="220" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="classe_line" parent="classe" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="classe_methods" parent="classe" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="+ calculerRetardGlobal(): float" vertex="1">
+          <mxGeometry height="22" width="220" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="enseignant" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;&lt;entity&gt;&gt;&#xa;Enseignant" vertex="1">
+          <mxGeometry height="160" width="220" x="50" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="enseignant_attr" parent="enseignant" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="- id: int&#xa;- nom_complet: string&#xa;- email: string&#xa;- spécialité: string&#xa;- heures_max_semaine: int&#xa;- statut: enum" vertex="1">
+          <mxGeometry height="90" width="220" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="enseignant_line" parent="enseignant" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="enseignant_methods" parent="enseignant" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="+ demanderCongé(): void" vertex="1">
+          <mxGeometry height="22" width="220" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="activite" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" value="&lt;&lt;entity&gt;&gt;&#xa;ActivitéAcadémique" vertex="1">
+          <mxGeometry height="190" width="220" x="360" y="305" as="geometry" />
+        </mxCell>
+        <mxCell id="activite_attr" parent="activite" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="- id: int&#xa;- nom: string&#xa;- code: string&#xa;- type: enum&#xa;- volume_horaire_Ci: float&#xa;- heures_réalisées_H: float&#xa;- activation_ri: bool&#xa;- deadline_Di: date&#xa;- période_Ti: int&#xa;- facteur_charge_U: float" vertex="1">
+          <mxGeometry height="120" width="220" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="activite_line" parent="activite" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="activite_methods" parent="activite" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="+ calculerRetard(): float" vertex="1">
+          <mxGeometry height="22" width="220" y="168" as="geometry" />
+        </mxCell>
+        <mxCell id="creneau" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" value="&lt;&lt;entity&gt;&gt;&#xa;CréneauHoraire" vertex="1">
+          <mxGeometry height="160" width="220" x="360" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="creneau_attr" parent="creneau" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="- id: int&#xa;- date: date&#xa;- heures: TimeRange&#xa;- salle: string&#xa;- retard: float&#xa;- bloqué_par_congé: bool" vertex="1">
+          <mxGeometry height="90" width="220" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="creneau_line" parent="creneau" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="creneau_methods" parent="creneau" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="+ annuler(): void" vertex="1">
+          <mxGeometry height="22" width="220" y="138" as="geometry" />
+        </mxCell>
+        <mxCell id="demande_conge" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;&lt;entity&gt;&gt;&#xa;DemandeCongé" vertex="1">
+          <mxGeometry height="180" width="220" x="60" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="demande_conge_attr" parent="demande_conge" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="- id: int&#xa;- dates: DateRange&#xa;- type: enum&#xa;- statut: enum&#xa;- jours_ouvrés: int&#xa;- raison: string&#xa;- email_approbateur: string" vertex="1">
+          <mxGeometry height="100" width="220" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="demande_conge_line" parent="demande_conge" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="demande_conge_methods" parent="demande_conge" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="+ approuver(): void&#xa;+ rejeter(): void" vertex="1">
+          <mxGeometry height="32" width="220" y="148" as="geometry" />
+        </mxCell>
+        <mxCell id="calendrier" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;&lt;entity&gt;&gt;&#xa;CalendrierAcadémique" vertex="1">
+          <mxGeometry height="160" width="220" x="920" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="calendrier_attr" parent="calendrier" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="- id: int&#xa;- année_académique: string&#xa;- dates: DateRange&#xa;- heures_par_jour: int" vertex="1">
+          <mxGeometry height="80" width="220" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="calendrier_line" parent="calendrier" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" value="" vertex="1">
+          <mxGeometry height="8" width="220" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="calendrier_methods" parent="calendrier" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="+ estJourOuvrable(): bool&#xa;+ calculerD_effectif(): int" vertex="1">
+          <mxGeometry height="32" width="220" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="jour_ferie" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f5f5f5;strokeColor=#666666;" value="&lt;&lt;entity&gt;&gt;&#xa;JourFérié" vertex="1">
+          <mxGeometry height="120" width="180" x="940" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="jour_ferie_attr" parent="jour_ferie" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="- id: int&#xa;- nom: string&#xa;- date: date&#xa;- récurrent: bool" vertex="1">
+          <mxGeometry height="80" width="180" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="periode_vacances" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f5f5f5;strokeColor=#666666;" value="&lt;&lt;entity&gt;&gt;&#xa;PériodeVacances" vertex="1">
+          <mxGeometry height="130" width="180" x="920" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="periode_vacances_attr" parent="periode_vacances" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" value="- id: int&#xa;- nom: string&#xa;- dates: DateRange&#xa;- type: enum" vertex="1">
+          <mxGeometry height="90" width="180" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_univ_ufr" edge="1" parent="1" source="universite" target="ufr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_univ_ufr_card1" connectable="0" parent="rel_univ_ufr" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.8" y="-1" as="geometry">
+            <mxPoint x="5" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_univ_ufr_card2" connectable="0" parent="rel_univ_ufr" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1..*" vertex="1">
+          <mxGeometry relative="1" x="0.8" y="1" as="geometry">
+            <mxPoint x="-10" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_ufr_parcours" edge="1" parent="1" source="ufr" target="parcours">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_ufr_parcours_card1" connectable="0" parent="rel_ufr_parcours" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.8" y="-1" as="geometry">
+            <mxPoint x="5" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_ufr_parcours_card2" connectable="0" parent="rel_ufr_parcours" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1..*" vertex="1">
+          <mxGeometry relative="1" x="0.8" y="1" as="geometry">
+            <mxPoint x="-10" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_parcours_classe" edge="1" parent="1" source="parcours" target="classe">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_parcours_classe_card1" connectable="0" parent="rel_parcours_classe" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.8" y="-1" as="geometry">
+            <mxPoint x="5" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_parcours_classe_card2" connectable="0" parent="rel_parcours_classe" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1..*" vertex="1">
+          <mxGeometry relative="1" x="0.8" y="1" as="geometry">
+            <mxPoint x="15" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_ens_act" edge="1" parent="1" source="enseignant" target="activite">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_ens_act_label" connectable="0" parent="rel_ens_act" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" value="enseigne" vertex="1">
+          <mxGeometry relative="1" x="-0.1" y="1" as="geometry">
+            <mxPoint y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_ens_act_card1" connectable="0" parent="rel_ens_act" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.8" y="-1" as="geometry">
+            <mxPoint x="1" y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_ens_act_card2" connectable="0" parent="rel_ens_act" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.8" y="1" as="geometry">
+            <mxPoint x="-11" y="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_classe_act" edge="1" parent="1" source="classe" target="activite">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_classe_act_card1" connectable="0" parent="rel_classe_act" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="-0.8" y="-1" as="geometry">
+            <mxPoint x="15" y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_classe_act_card2" connectable="0" parent="rel_classe_act" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1..*" vertex="1">
+          <mxGeometry relative="1" x="0.8" y="1" as="geometry">
+            <mxPoint x="-15" y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_act_creneau" edge="1" parent="1" source="activite" target="creneau">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_act_creneau_label" connectable="0" parent="rel_act_creneau" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10" value="génère" vertex="1">
+          <mxGeometry relative="1" x="-0.1" y="1" as="geometry">
+            <mxPoint x="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_act_creneau_card1" connectable="0" parent="rel_act_creneau" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.8" y="-1" as="geometry">
+            <mxPoint x="-5" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_act_creneau_card2" connectable="0" parent="rel_act_creneau" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.8" y="1" as="geometry">
+            <mxPoint x="-5" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_ens_conge" edge="1" parent="1" source="enseignant" target="demande_conge">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_ens_conge_card1" connectable="0" parent="rel_ens_conge" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.8" y="-1" as="geometry">
+            <mxPoint x="-5" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_ens_conge_card2" connectable="0" parent="rel_ens_conge" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.8" y="1" as="geometry">
+            <mxPoint x="-5" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_conge_calendrier" edge="1" parent="1" source="demande_conge" style="dashed=1;endArrow=open;endFill=0" target="calendrier">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_conge_calendrier_label" connectable="0" parent="rel_conge_calendrier" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9" value="&lt;&lt;valide par&gt;&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.1" y="1" as="geometry">
+            <mxPoint y="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_conge_creneau" edge="1" parent="1" source="demande_conge" target="creneau">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_conge_creneau_label" connectable="0" parent="rel_conge_creneau" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontStyle=1;fontColor=#CC0000" value="bloque" vertex="1">
+          <mxGeometry relative="1" x="-0.1" y="1" as="geometry">
+            <mxPoint y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_conge_creneau_card1" connectable="0" parent="rel_conge_creneau" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="-0.8" y="-1" as="geometry">
+            <mxPoint x="10" y="-5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_conge_creneau_card2" connectable="0" parent="rel_conge_creneau" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.8" y="1" as="geometry">
+            <mxPoint x="-10" y="5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_cal_ferie" edge="1" parent="1" source="calendrier" target="jour_ferie">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_cal_ferie_card1" connectable="0" parent="rel_cal_ferie" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.8" y="-1" as="geometry">
+            <mxPoint x="5" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_cal_ferie_card2" connectable="0" parent="rel_cal_ferie" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.8" y="1" as="geometry">
+            <mxPoint x="-10" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_cal_vacances" edge="1" parent="1" source="calendrier" target="periode_vacances">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_cal_vacances_card1" connectable="0" parent="rel_cal_vacances" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="1" vertex="1">
+          <mxGeometry relative="1" x="-0.8" y="-1" as="geometry">
+            <mxPoint x="5" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_cal_vacances_card2" connectable="0" parent="rel_cal_vacances" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="0..*" vertex="1">
+          <mxGeometry relative="1" x="0.8" y="1" as="geometry">
+            <mxPoint x="-10" y="10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rel_creneau_cal" edge="1" parent="1" source="creneau" style="dashed=1;endArrow=open;endFill=0" target="calendrier">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="rel_creneau_cal_label" connectable="0" parent="rel_creneau_cal" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9" value="&lt;&lt;respecte&gt;&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.1" y="1" as="geometry">
+            <mxPoint y="-8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

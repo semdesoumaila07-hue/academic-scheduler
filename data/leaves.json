@@ -1,0 +1,45 @@
+{
+  "demandes": [
+    {
+      "enseignant_id": 4,
+      "enseignant_nom": "OUATTARA Ibrahim",
+      "type": "Mission",
+      "date_debut": "2026-02-13",
+      "date_fin": "2026-02-14",
+      "nb_jours": 2,
+      "justification": "maux de tete",
+      "id": "leave_1_1770983181.013533",
+      "statut": "Approuvée",
+      "date_creation": "2026-02-13 11:46:21",
+      "date_validation": "2026-02-13 11:46:36",
+      "validateur": "Responsable Pédagogique"
+    }
+  ],
+  "enseignants": [
+    {
+      "id": 1,
+      "nom": "KABORE",
+      "prenom": "Marie"
+    },
+    {
+      "id": 2,
+      "nom": "TRAORE",
+      "prenom": "Moussa"
+    },
+    {
+      "id": 3,
+      "nom": "SAWADOGO",
+      "prenom": "Fatimata"
+    },
+    {
+      "id": 4,
+      "nom": "OUATTARA",
+      "prenom": "Ibrahim"
+    },
+    {
+      "id": 5,
+      "nom": "ZONGO",
+      "prenom": "Aminata"
+    }
+  ]
+}

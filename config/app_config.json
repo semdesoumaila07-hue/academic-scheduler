@@ -1,0 +1,110 @@
+{
+  "conception_mode": true,
+  "application": {
+    "name": "Système d'Ordonnancement Académique P-équitable",
+    "version": "1.0.0",
+    "description": "Système de planification des emplois du temps basé sur l'algorithme Pfair",
+    "organization": "Université Norbert Zongo",
+    "country": "Burkina Faso"
+  },
+  "database": {
+    "type": "sqlite",
+    "filename": "ordonnancement.db",
+    "path": "data/ordonnancement.db",
+    "auto_backup": true,
+    "max_backups": 10,
+    "backup_on_close": true,
+    "pragmas": {
+      "foreign_keys": "ON",
+      "journal_mode": "WAL",
+      "synchronous": "NORMAL",
+      "cache_size": -64000
+    }
+  },
+  "logging": {
+    "enabled": true,
+    "level": "INFO",
+    "console_output": true,
+    "file_output": true,
+    "max_file_size_mb": 10,
+    "backup_count": 5,
+    "files": {
+      "app": "logs/app.log",
+      "errors": "logs/errors.log",
+      "database": "logs/database.log",
+      "pfair": "logs/pfair.log"
+    }
+  },
+  "ui": {
+    "theme": "Fusion",
+    "language": "fr",
+    "window": {
+      "width": 1200,
+      "height": 800,
+      "resizable": true,
+      "centered": true
+    },
+    "auto_refresh_interval_seconds": 30
+  },
+  "schedule": {
+    "default_slot_duration_hours": 2,
+    "work_start_time": "08:00",
+    "work_end_time": "18:00",
+    "max_hours_per_day": 8,
+    "allow_weekend_scheduling": false,
+    "default_rooms": [
+      "A101", "A102", "A103",
+      "B201", "B202", "B203",
+      "C301", "C302", "C303"
+    ]
+  },
+  "pfair": {
+    "max_charge_factor": 1.0,
+    "urgent_threshold_alpha": 1.0,
+    "important_threshold_alpha": 0.5,
+    "priority_weight": 0.2,
+    "enable_rebalancing": true
+  },
+  "exports": {
+    "pdf": {
+      "enabled": true,
+      "page_size": "A4",
+      "orientation": "landscape",
+      "output_dir": "outputs/schedules"
+    },
+    "excel": {
+      "enabled": true,
+      "engine": "openpyxl",
+      "output_dir": "outputs/exports"
+    },
+    "reports": {
+      "enabled": true,
+      "output_dir": "outputs/reports",
+      "auto_cleanup_days": 30
+    }
+  },
+  "notifications": {
+    "enabled": true,
+    "show_conflicts": true,
+    "show_deadlines": true,
+    "deadline_warning_days": 7
+  },
+  "performance": {
+    "cache_enabled": true,
+    "cache_size_mb": 100,
+    "lazy_loading": true,
+    "batch_size": 50
+  },
+  "security": {
+    "enable_backups": true,
+    "backup_encryption": false,
+    "session_timeout_minutes": 60
+  },
+  "paths": {
+    "data": "data",
+    "logs": "logs",
+    "backups": "backups",
+    "outputs": "outputs",
+    "config": "config"
+  }
+}

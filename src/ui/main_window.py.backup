@@ -1,0 +1,760 @@
+"""
+Fenêtre principale de l'application.
+"""
+from PyQt5.QtWidgets import (
+    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
+    QLabel, QPushButton, QTabWidget, QFrame, QStatusBar
+)
+from PyQt5.QtCore import Qt
+
+# Import des onglets
+from .tabs import (
+    DashboardTab,
+    StructureTab,
+    TeachersTab,
+    ActivitiesTab,
+    CalendarTab,
+    SchedulingTab,
+    AnalysisTab,
+    LeavesTab,
+    ReportsTab,
+    TimetableTab,
+    AvailabilityTab,
+)
+from ..services.permissions_config import TAB_ITEMS, get_allowed_tab_indices
+
+# Ordre des onglets (index logique → classe)
+TAB_CLASSES = [
+    DashboardTab, StructureTab, TeachersTab, ActivitiesTab, CalendarTab,
+    LeavesTab, SchedulingTab, AnalysisTab, ReportsTab, TimetableTab,
+    AvailabilityTab,
+]
+
+
+def _tab_item_by_index(idx):
+    """Retourne l'élément TAB_ITEMS dont l'index logique est idx."""
+    for item in TAB_ITEMS:
+        if item[0] == idx:
+            return item
+    return None
+
+
+class MainWindow(QMainWindow):
+
+    """Fenêtre principale. Si current_user est fourni, seuls les onglets autorisés sont visibles."""
+
+    
+
+    def __init__(self, current_user=None):
+
+        super().__init__()
+
+        self.current_user = current_user
+
+        self._allowed_indices = get_allowed_tab_indices(current_user)
+
+        if self._allowed_indices is None:
+
+            self._allowed_indices = list(range(len(TAB_CLASSES)))
+
+        
+
+        self.setWindowTitle("Système d'Ordonnancement Académique P-équitable")
+
+        self.setMinimumSize(1400, 900)
+
+        
+
+        self.setStyleSheet(self.get_global_style())
+
+        self.init_ui()
+
+        self.center_window()
+
+    
+
+    def init_ui(self):
+
+        """Initialise l'interface utilisateur."""
+
+        # Widget central
+
+        central_widget = QWidget()
+
+        self.setCentralWidget(central_widget)
+
+        
+
+        # Layout principal
+
+        main_layout = QVBoxLayout(central_widget)
+
+        main_layout.setContentsMargins(0, 0, 0, 0)
+
+        main_layout.setSpacing(0)
+
+        
+
+        # Barre supérieure
+
+        top_bar = self.create_top_bar()
+
+        main_layout.addWidget(top_bar)
+
+        
+
+        # Contenu principal
+
+        content_layout = QHBoxLayout()
+
+        content_layout.setContentsMargins(0, 0, 0, 0)
+
+        content_layout.setSpacing(0)
+
+        
+
+        # Menu latéral
+
+        sidebar = self.create_sidebar()
+
+        content_layout.addWidget(sidebar)
+
+        
+
+        # Zone de contenu (onglets)
+
+        self.tab_widget = self.create_tab_widget()
+
+        content_layout.addWidget(self.tab_widget, 1)
+
+        
+
+        main_layout.addLayout(content_layout, 1)
+
+        
+
+        # Barre de statut
+
+        self.create_status_bar()
+
+    
+
+    def create_top_bar(self):
+
+        """Crée la barre supérieure."""
+
+        top_bar = QFrame()
+
+        top_bar.setFixedHeight(70)
+
+        top_bar.setStyleSheet("""
+
+            QFrame {
+
+                background-color: white;
+
+                border-bottom: 1px solid #E5E7EB;
+
+            }
+
+        """)
+
+        
+
+        layout = QHBoxLayout(top_bar)
+
+        layout.setContentsMargins(30, 0, 30, 0)
+
+        
+
+        # Logo et titre
+
+        logo_layout = QHBoxLayout()
+
+        
+
+        # Icône
+
+        icon_label = QLabel("📊")
+
+        icon_label.setStyleSheet("font-size: 32px;")
+
+        
+
+        # Titre
+
+        title_layout = QVBoxLayout()
+
+        title_layout.setSpacing(2)
+
+        
+
+        app_name = QLabel("Pfair Scheduler")
+
+        app_name.setStyleSheet("""
+
+            font-size: 18px;
+
+            font-weight: 700;
+
+            color: #1F2937;
+
+        """)
+
+        
+
+        app_subtitle = QLabel("Ordonnancement académique")
+
+        app_subtitle.setStyleSheet("""
+
+            font-size: 12px;
+
+            color: #6B7280;
+
+        """)
+
+        
+
+        title_layout.addWidget(app_name)
+
+        title_layout.addWidget(app_subtitle)
+
+        
+
+        logo_layout.addWidget(icon_label)
+
+        logo_layout.addLayout(title_layout)
+
+        logo_layout.addStretch()
+
+        
+
+        layout.addLayout(logo_layout)
+
+        layout.addStretch()
+
+        
+
+        # Bouton Administration (visible si l'utilisateur a le rôle Admin)
+
+        from src.ui.admin_dashboard import AdminDashboard
+
+        if self.current_user and hasattr(self.current_user, 'roles'):
+
+            if any(getattr(r, 'name', '').lower() == 'admin' for r in self.current_user.roles):
+
+                btn_admin = QPushButton("Administration")
+
+                btn_admin.setStyleSheet("padding: 6px 18px; font-weight: bold; background: #3B82F6; color: white; border-radius: 6px;")
+
+                btn_admin.clicked.connect(self.open_admin_dashboard)
+
+                layout.addWidget(btn_admin)
+
+        # Utilisateur connecté
+
+        user_layout = QHBoxLayout()
+
+        user_layout.setSpacing(15)
+
+    def open_admin_dashboard(self):
+
+        from src.ui.admin_dashboard import AdminDashboard
+
+        self.admin_window = AdminDashboard(self)
+
+        self.admin_window.show()
+
+        
+
+        user_badge = QLabel("?")
+
+        user_badge.setFixedSize(40, 40)
+
+        user_badge.setAlignment(Qt.AlignCenter)
+
+        user_badge.setStyleSheet("""
+
+            QLabel {
+
+                background-color: #3B82F6;
+
+                color: white;
+
+                border-radius: 20px;
+
+                font-size: 16px;
+
+                font-weight: bold;
+
+            }
+
+        """)
+
+        if self.current_user and getattr(self.current_user, 'username', None):
+
+            initial = (self.current_user.username or "?")[0].upper()
+
+            user_badge.setText(initial)
+
+        
+
+        display_name = "Invité"
+
+        if self.current_user:
+
+            display_name = getattr(self.current_user, 'username', None) or getattr(self.current_user, 'email', 'Utilisateur')
+
+        user_name = QLabel(display_name)
+
+        user_name.setStyleSheet("""
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            color: #1F2937;
+
+        """)
+
+        
+
+        # Icône dropdown
+
+        dropdown_icon = QLabel("▼")
+
+        dropdown_icon.setStyleSheet("font-size: 10px; color: #6B7280;")
+
+        
+
+        user_layout.addWidget(user_badge)
+
+        user_layout.addWidget(user_name)
+
+        user_layout.addWidget(dropdown_icon)
+
+        
+
+        layout.addLayout(user_layout)
+
+        
+
+        return top_bar
+
+    
+
+    def create_sidebar(self):
+
+        """Crée le menu latéral (uniquement les onglets autorisés)."""
+
+        sidebar = QFrame()
+
+        sidebar.setFixedWidth(250)
+
+        sidebar.setStyleSheet("""
+
+            QFrame {
+
+                background-color: #F9FAFB;
+
+                border-right: 1px solid #E5E7EB;
+
+            }
+
+        """)
+
+        
+
+        layout = QVBoxLayout(sidebar)
+
+        layout.setContentsMargins(0, 20, 0, 20)
+
+        layout.setSpacing(5)
+
+        
+
+        self.nav_buttons = []
+
+        for local_index, logic_index in enumerate(self._allowed_indices):
+
+            item = _tab_item_by_index(logic_index)
+
+            if item is None:
+
+                continue
+
+            _, _, icon, label = item
+
+            btn = self.create_nav_button(icon, label, local_index)
+
+            self.nav_buttons.append(btn)
+
+            layout.addWidget(btn)
+
+        
+
+        layout.addStretch()
+
+        if self.nav_buttons:
+
+            self.nav_buttons[0].setProperty("active", True)
+
+            self.nav_buttons[0].setStyleSheet(self.get_nav_button_style(True))
+
+        
+
+        return sidebar
+
+    
+
+    def create_nav_button(self, icon, text, tab_index):
+
+        """Crée un bouton de navigation."""
+
+        btn = QPushButton(f"{icon}  {text}")
+
+        btn.setFixedHeight(45)
+
+        btn.setCursor(Qt.PointingHandCursor)
+
+        btn.setStyleSheet(self.get_nav_button_style(False))
+
+        
+
+        # Connecter au changement d'onglet
+
+        if tab_index >= 0:
+
+            btn.clicked.connect(lambda: self.switch_tab(tab_index, btn))
+
+        
+
+        return btn
+
+    
+
+    def switch_tab(self, index, button):
+
+        """Change d'onglet et met à jour le menu."""
+
+        self.tab_widget.setCurrentIndex(index)
+
+        
+
+        # Réinitialiser tous les boutons
+
+        for btn in self.nav_buttons:
+
+            btn.setProperty("active", False)
+
+            btn.setStyleSheet(self.get_nav_button_style(False))
+
+        
+
+        # Activer le bouton cliqué
+
+        button.setProperty("active", True)
+
+        button.setStyleSheet(self.get_nav_button_style(True))
+
+    
+
+    def create_tab_widget(self):
+        """Crée le widget d'onglets. Sauvegarde les références pour on_structure_changed()."""
+        tab_widget = QTabWidget()
+        tab_widget.setStyleSheet("""
+            QTabWidget::pane { border: none; background: white; }
+            QTabBar::tab { display: none; }
+        """)
+
+        # Instancier ActivitiesTab en premier (passé à TeachersTab)
+        activities_tab_instance = None
+        for logic_index in self._allowed_indices:
+            if logic_index >= len(TAB_CLASSES):
+                continue
+            item = _tab_item_by_index(logic_index)
+            title = item[3] if item else "Onglet"
+            tab_class = TAB_CLASSES[logic_index]
+
+            if tab_class.__name__ == 'ActivitiesTab':
+                activities_tab_instance = tab_class(current_user=self.current_user)
+                self.activities_tab = activities_tab_instance          # ✅ référence
+                tab_widget.addTab(activities_tab_instance, title)
+
+            elif tab_class.__name__ == 'TeachersTab':
+                instance = tab_class(activities_tab=activities_tab_instance)
+                self.teachers_tab = instance                           # ✅ référence
+                tab_widget.addTab(instance, title)
+
+            elif tab_class.__name__ == 'StructureTab':
+                instance = tab_class()
+                self.structure_tab = instance                          # ✅ référence
+                tab_widget.addTab(instance, title)
+
+            elif tab_class.__name__ == 'DashboardTab':
+                instance = tab_class()
+                self.dashboard_tab = instance                          # ✅ référence
+                tab_widget.addTab(instance, title)
+
+            elif tab_class.__name__ == 'LeavesTab':
+                tab_widget.addTab(tab_class(current_user=self.current_user), title)
+
+            else:
+                tab_widget.addTab(tab_class(), title)
+
+        return tab_widget
+
+    def on_structure_changed(self):
+        """Appelée par StructureTab/TeachersTab après chaque modification SQLite.
+        Rafraîchit tous les onglets qui dépendent de la structure."""
+        # ── ActivitiesTab : recharge enseignants + cohortes ──────────────
+        if hasattr(self, 'activities_tab') and self.activities_tab is not None:
+            try:
+                self.activities_tab.load_related_data()
+            except Exception as e:
+                print(f"Erreur refresh ActivitiesTab: {e}")
+
+        # ── DashboardTab : recharge les KPIs depuis SQLite ────────────────
+        if hasattr(self, 'dashboard_tab') and self.dashboard_tab is not None:
+            try:
+                self.dashboard_tab.refresh_stats()
+            except Exception as e:
+                print(f"Erreur refresh DashboardTab: {e}")
+
+        # ── TeachersTab : recharge UFR et cohortes ────────────────────────
+        if hasattr(self, 'teachers_tab') and self.teachers_tab is not None:
+            try:
+                self.teachers_tab.load_ufrs()
+                self.teachers_tab.load_cohortes()
+            except Exception as e:
+                print(f"Erreur refresh TeachersTab: {e}")
+
+    
+
+    def create_status_bar(self):
+
+        """Crée la barre de statut."""
+
+        status_bar = QStatusBar()
+
+        status_bar.setStyleSheet("""
+
+            QStatusBar {
+
+                background-color: #F9FAFB;
+
+                border-top: 1px solid #E5E7EB;
+
+                padding: 5px 20px;
+
+                color: #6B7280;
+
+                font-size: 12px;
+
+            }
+
+        """)
+
+        
+
+        status_bar.showMessage("Prêt | Système d'Ordonnancement Académique v1.0.0")
+
+        self.setStatusBar(status_bar)
+
+    
+
+    def center_window(self):
+
+        """Centre la fenêtre sur l'écran."""
+
+        from PyQt5.QtWidgets import QDesktopWidget
+
+        
+
+        screen = QDesktopWidget().screenGeometry()
+
+        size = self.geometry()
+
+        x = (screen.width() - size.width()) // 2
+
+        y = (screen.height() - size.height()) // 2
+
+        self.move(x, y)
+
+    
+
+    def get_nav_button_style(self, active):
+
+        """Retourne le style d'un bouton de navigation."""
+
+        if active:
+
+            return """
+
+                QPushButton {
+
+                    background-color: white;
+
+                    color: #1F2937;
+
+                    border: none;
+
+                    border-left: 3px solid #000;
+
+                    text-align: left;
+
+                    padding-left: 20px;
+
+                    font-size: 14px;
+
+                    font-weight: 600;
+
+                }
+
+            """
+
+        else:
+
+            return """
+
+                QPushButton {
+
+                    background-color: transparent;
+
+                    color: #6B7280;
+
+                    border: none;
+
+                    border-left: 3px solid transparent;
+
+                    text-align: left;
+
+                    padding-left: 20px;
+
+                    font-size: 14px;
+
+                    font-weight: 500;
+
+                }
+
+                QPushButton:hover {
+
+                    background-color: #F3F4F6;
+
+                    color: #1F2937;
+
+                }
+
+            """
+
+    
+
+    def get_global_style(self):
+
+        """Retourne le style global de l'application."""
+
+        return """
+
+            QMainWindow {
+
+                background-color: #F9FAFB;
+
+            }
+
+            
+
+            QWidget {
+
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+            }
+
+            
+
+            QScrollBar:vertical {
+
+                border: none;
+
+                background: #F3F4F6;
+
+                width: 10px;
+
+                border-radius: 5px;
+
+            }
+
+            
+
+            QScrollBar::handle:vertical {
+
+                background: #D1D5DB;
+
+                border-radius: 5px;
+
+                min-height: 20px;
+
+            }
+
+            
+
+            QScrollBar::handle:vertical:hover {
+
+                background: #9CA3AF;
+
+            }
+
+            
+
+            QScrollBar::add-line:vertical,
+
+            QScrollBar::sub-line:vertical {
+
+                height: 0px;
+
+            }
+
+            
+
+            QScrollBar:horizontal {
+
+                border: none;
+
+                background: #F3F4F6;
+
+                height: 10px;
+
+                border-radius: 5px;
+
+            }
+
+            
+
+            QScrollBar::handle:horizontal {
+
+                background: #D1D5DB;
+
+                border-radius: 5px;
+
+                min-width: 20px;
+
+            }
+
+            
+
+            QScrollBar::handle:horizontal:hover {
+
+                background: #9CA3AF;
+
+            }
+
+            
+
+            QScrollBar::add-line:horizontal,
+
+            QScrollBar::sub-line:horizontal {
+
+                width: 0px;
+
+            }
+
+        """

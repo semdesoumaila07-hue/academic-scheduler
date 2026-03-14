@@ -1,0 +1,4 @@
+id,nom_complet,email,telephone,specialite,statut,max_heures_semaine,max_heures_jour
+ens_2,KABORE Marie,ma@gmail.com,70123456,Algorithmique et Structure de donnée,Permanent,40,8
+ens_3,TRAORE Moussa,mou@gmail.com,Base de donnés,,Permanent,40,8
+ens_4,SAWADOGO Fatimata,Fati@gmail.com,56789807,Developpement Web,Permanent,40,8

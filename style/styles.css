@@ -1,0 +1,62 @@
+/* Estilos básicos - Go Live Server */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+    background-color: #f5f5f5;
+    background-image: url('../images/background.svg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: #222;
+    --bg-overlay: rgba(255,255,255,0.60);
+    position: relative;
+}
+
+/* Subtle overlay to improve contrast */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: var(--bg-overlay);
+    pointer-events: none;
+    transition: opacity .2s ease, background-color .2s ease;
+    opacity: 1;
+    z-index: 0;
+}
+
+/* When background is disabled, hide image and overlay */
+.bg-disabled {
+    background-image: none !important;
+}
+.bg-disabled::after {
+    opacity: 0 !important;
+}
+
+/* Toggle button */
+#bg-toggle {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 9999;
+    background: rgba(255,255,255,0.95);
+    border: 1px solid rgba(0,0,0,0.08);
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    font-size: 13px;
+}
+#bg-toggle[aria-pressed="true"] {
+    background: #007acc;
+    color: #fff;
+    border-color: #0062a3;
+}
+
+h1 {
+    color: #333;
+    border-bottom: 2px solid #007acc;
+    padding-bottom: 10px;
+}

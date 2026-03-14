@@ -1,0 +1,83 @@
+# 🎓 Système d'Ordonnancement Académique P-équitable
+
+Système de planification automatique des emplois du temps basé sur l'algorithme Pfair.
+
+## 🚀 Installation Rapide
+
+### Prérequis
+- Python 3.8 ou supérieur
+- pip
+
+### Installation
+
+1. **Cloner ou extraire le projet**
+```bash
+cd academic-scheduler
+```
+
+2. **Installer les dépendances**
+```bash
+pip install -r requirements.txt
+```
+
+3. **Initialiser la base de données avec des données de test**
+```bash
+python init_db.py --with-test-data
+```
+
+4. **Lancer l'application**
+```bash
+python main.py
+```
+
+## 📚 Fonctionnalités
+
+- ✅ Génération automatique d'emplois du temps avec l'algorithme Pfair
+- ✅ Gestion de la structure universitaire (Universités, UFR, Programmes, Cohortes)
+- ✅ Gestion des enseignants et étudiants
+- ✅ Gestion des activités académiques
+- ✅ Détection automatique des conflits
+- ✅ Calcul des retards et activités urgentes
+- ✅ Gestion des demandes de congés
+- ✅ Export PDF et Excel
+- ✅ Rapports analytiques
+
+## 🔬 Algorithme Pfair
+
+L'algorithme Pfair (Proportionate Fair) garantit une progression équitable de toutes les activités :
+
+- **U(τi) = Ci / D_effectif** - Facteur de charge
+- **lag(τi, t) = U(τi) × t - H(t)** - Retard
+- **α(τi, t) = lag / U(τi)** - Ratio d'urgence
+
+## 📖 Documentation
+
+- `docs/user_guide.md` - Guide utilisateur complet
+- `docs/architecture.md` - Architecture technique
+- `docs/api_reference.md` - Référence API
+
+## 🧪 Tests
+```bash
+pytest tests/
+```
+
+## 📄 Licence
+
+Projet académique - Université Norbert Zongo
+```
+
+---
+
+## ✅ MAINTENANT VOUS AVEZ TOUT !
+
+Votre structure devrait être :
+```
+academic-scheduler/
+├── main.py                 ✅
+├── init_db.py             ✅
+├── create_db.py           ✅ (vient d'être créé)
+├── test_data.py           ✅ (vient d'être créé)
+├── requirements.txt       ✅
+├── README.md              ✅ (vient d'être créé)
+└── src/
+    └── ...

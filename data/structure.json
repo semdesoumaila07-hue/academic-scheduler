@@ -1,0 +1,123 @@
+{
+  "universites": [
+    {
+      "nom": "Université Norbert Zongo",
+      "code": "UNZ",
+      "ville": "KOUDOUGOU",
+      "adresse": "03 BP 0742 KOUDOUGOU O4",
+      "id": "univ_1_1771408351.183024"
+    },
+    {
+      "nom": "Université Nazi Boni",
+      "code": "UNB",
+      "ville": "Bobo Dioulasso",
+      "adresse": "03 BP 056 BOBO DIOULASSO 37",
+      "id": "univ_2_1771537644.855724"
+    },
+    {
+      "nom": "Université Joseph Ki-Zerbo",
+      "code": "UJKZ",
+      "ville": "OUAGADOUGOU",
+      "adresse": "03 BP 7021 OUAGADOUGOU 03",
+      "id": "univ_3_1771687888.374874"
+    }
+  ],
+  "ufrs": [
+    {
+      "nom": "Science et Tectnique",
+      "code": "UFR-ST",
+      "directeur": "Dr SEMDE",
+      "universite_id": "univ_1_1771408351.183024",
+      "id": "ufr_1_1771408417.523851"
+    },
+    {
+      "nom": "Science et Technique",
+      "code": "UFR-ST",
+      "directeur": "Dr ZONGO",
+      "universite_id": "univ_1_1771408351.183024",
+      "id": "ufr_2_1771537346.974481"
+    },
+    {
+      "nom": "Science des Ressource Humains",
+      "code": "UFR-LSH",
+      "directeur": "Dr BASSANE",
+      "universite_id": "univ_2_1771537644.855724",
+      "id": "ufr_3_1771537787.097436"
+    },
+    {
+      "nom": "Science et Technique",
+      "code": "UFR-ST",
+      "directeur": "Dr SOME",
+      "universite_id": "univ_3_1771687888.374874",
+      "id": "ufr_4_1771687962.518454"
+    }
+  ],
+  "programmes": [
+    {
+      "nom": "Informatique",
+      "code": "INFO",
+      "niveau": "Licence 1",
+      "ufr_id": "ufr_1_1771408417.523851",
+      "duree_annees": 3,
+      "id": "prog_1_1771408453.63258"
+    },
+    {
+      "nom": "Informatique",
+      "code": "LING",
+      "niveau": "Licence 3",
+      "ufr_id": "ufr_3_1771537787.097436",
+      "duree_annees": 3,
+      "id": "prog_2_1771538010.943751"
+    },
+    {
+      "nom": "Physique",
+      "code": "PHYS",
+      "niveau": "Master 1 ",
+      "ufr_id": "ufr_2_1771537346.974481",
+      "duree_annees": 3,
+      "id": "prog_3_1771694020.841774"
+    }
+  ],
+  "cohortes": [
+    {
+      "nom": "INFO A",
+      "annee_academique": "2025-2026",
+      "semestre": "Semestre 1",
+      "date_debut": "01/10/2025",
+      "date_fin": "28/02/2026",
+      "programme_id": "prog_1_1771408453.63258",
+      "effectif": 45,
+      "id": "cohorte_1_1771408573.833772"
+    },
+    {
+      "nom": "INFO B",
+      "annee_academique": "2025-2026",
+      "semestre": "Semestre 1",
+      "date_debut": "01/03/2026",
+      "date_fin": "31/07/2026",
+      "programme_id": "prog_1_1771408453.63258",
+      "effectif": 45,
+      "id": "cohorte_2_1771415469.562442"
+    },
+    {
+      "nom": "L3 INFO A",
+      "annee_academique": "2025-2026",
+      "semestre": "Semestre 5",
+      "date_debut": "06/01/2025",
+      "date_fin": "06/02/2026",
+      "programme_id": "prog_2_1771538010.943751",
+      "effectif": 95,
+      "id": "cohorte_3_1771538283.319745"
+    },
+    {
+      "nom": "AMPHI 500",
+      "annee_academique": "2025-2026",
+      "semestre": "Semestre 2",
+      "date_debut": "01/10/2025",
+      "date_fin": "01/02/2026",
+      "programme_id": "prog_3_1771694020.841774",
+      "effectif": 45,
+      "id": "cohorte_4_1771712486.103316"
+    }
+  ]
+}
