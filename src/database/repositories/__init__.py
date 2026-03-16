@@ -10,7 +10,10 @@ from .leave_request_repository import LeaveRequestRepository
 from .constraint_report_repository import ConstraintReportRepository
 from .program_repository import ProgramRepository
 from .schedule_repository import ScheduleRepository
+<<<<<<< HEAD
 from .statistics_repository import StatisticsRepository
+=======
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
 from .student_repository import StudentRepository
 from .teacher_repository import TeacherRepository
 from .teacher_availability_repository import TeacherAvailabilityRepository
@@ -31,9 +34,12 @@ __all__ = [
     'ConstraintReportRepository',
     'ProgramRepository',
     'ScheduleRepository',
+<<<<<<< HEAD
     'StatisticsRepository',
     'ProgramRepository',
     'ScheduleRepository',
+=======
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     'StudentRepository',
     'TeacherRepository',
     'TeacherAvailabilityRepository',

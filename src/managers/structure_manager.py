@@ -44,8 +44,14 @@ class StructureManager:
     
     # ==================== UNIVERSITÉS ====================
     
+<<<<<<< HEAD
     def create_university(self, name: str, code: str, address: str, 
                          city: str, country: str = "Burkina Faso", current_user=None) -> Dict:
+=======
+    @require_permission('manage_structure')
+    def create_university(self, name: str, code: str, address: str, 
+                         city: str, country: str = "Burkina Faso") -> Dict:
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         """
         Crée une nouvelle université.
         
@@ -130,8 +136,14 @@ class StructureManager:
     
     # ==================== UFR ====================
     
+<<<<<<< HEAD
     def create_ufr(self, name: str, code: str, director: str, 
                    university_id: int, current_user=None) -> Dict:
+=======
+    @require_permission('manage_structure')
+    def create_ufr(self, name: str, code: str, director: str, 
+                   university_id: int) -> Dict:
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         """
         Crée une nouvelle UFR.
         
@@ -180,8 +192,14 @@ class StructureManager:
     
     # ==================== PROGRAMMES ====================
     
+<<<<<<< HEAD
     def create_program(self, name: str, code: str, level: ProgramLevelEnum,
                       duration_years: int, ufr_id: int, current_user=None) -> Dict:
+=======
+    @require_permission('manage_structure')
+    def create_program(self, name: str, code: str, level: ProgramLevelEnum,
+                      duration_years: int, ufr_id: int) -> Dict:
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         """
         Crée un nouveau programme.
         
@@ -240,9 +258,16 @@ class StructureManager:
     
     # ==================== COHORTES ====================
     
+<<<<<<< HEAD
     def create_cohort(self, name: str, academic_year: str, semester: int,
                      student_count: int, program_id: int, 
                      start_date: date, end_date: date, current_user=None) -> Dict:
+=======
+    @require_permission('manage_structure')
+    def create_cohort(self, name: str, academic_year: str, semester: int,
+                     student_count: int, program_id: int, 
+                     start_date: date, end_date: date) -> Dict:
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         """
         Crée une nouvelle cohorte.
         
@@ -329,8 +354,14 @@ class StructureManager:
     
     # ==================== ÉTUDIANTS ====================
     
+<<<<<<< HEAD
     def create_student(self, full_name: str, student_id: str, email: str,
                       phone: str, birth_date: date, cohort_id: int, current_user=None) -> Dict:
+=======
+    @require_permission('manage_structure')
+    def create_student(self, full_name: str, student_id: str, email: str,
+                      phone: str, birth_date: date, cohort_id: int) -> Dict:
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         """
         Crée un nouveau étudiant.
         

@@ -1,0 +1,51 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
+      "role": "Administrateur",
+      "nom": "SEMDE",
+      "prenom": "Soumaïla",
+      "email": "admin@univ.bf"
+    },
+    {
+      "id": 2,
+      "username": "resp.pedago",
+      "password": "6b939187e90b9eb6ea81518e6e676e3574bea83a7690eafccf3fb79bbdc7e99d",
+      "role": "Responsable Pédagogique",
+      "nom": "OUEDRAOGO",
+      "prenom": "Aminata",
+      "email": "resp.pedago@univ.bf"
+    },
+    {
+      "id": 3,
+      "username": "kabore.m",
+      "password": "00624b02e1f9b996a3278f559d5d55313552ad2c0bafc82adfd975c12df61eaf",
+      "role": "Enseignant",
+      "nom": "KABORE",
+      "prenom": "Marie",
+      "email": "marie.kabore@univ.bf"
+    },
+    {
+      "id": 4,
+      "username": "etudiant",
+      "password": "8285f134eeefb1b59dcde5eb4c322e5939f52e053480b9d3757517d3b93e20bb",
+      "role": "Étudiant",
+      "nom": "ZONGO",
+      "prenom": "Ibrahim",
+      "email": "ibrahim.zongo@etudiant.univ.bf"
+    },
+    {
+      "id": 5,
+      "username": "zongo@gmail.com",
+      "password": "d649cc2d751ef0a8490d66f31b46a26752af40412ffda6c211524c445c83692b",
+      "role": "Enseignant",
+      "nom": "ZONGO",
+      "prenom": "Dr",
+      "email": "zongo@gmail.com",
+      "active": true,
+      "force_change": true
+    }
+  ]
+}

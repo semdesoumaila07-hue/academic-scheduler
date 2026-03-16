@@ -5,6 +5,7 @@ body {
     padding: 20px;
     line-height: 1.6;
     background-color: #f5f5f5;
+<<<<<<< HEAD
     background-image: url('../images/background.svg');
     background-size: cover;
     background-attachment: fixed;
@@ -53,6 +54,8 @@ body::after {
     background: #007acc;
     color: #fff;
     border-color: #0062a3;
+=======
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
 }
 
 h1 {

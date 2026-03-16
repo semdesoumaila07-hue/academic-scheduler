@@ -36,8 +36,16 @@ else:
 
         def on_login_success(user):
             login_window.close()
+<<<<<<< HEAD
             main_window = MainWindow(current_user=user)
             main_window.show()
+=======
+            # Garder une référence au MainWindow sur l'objet QApplication
+            # pour éviter qu'il soit garbage-collected et fermé immédiatement.
+            main_window = MainWindow(current_user=user)
+            app.main_window = main_window
+            app.main_window.show()
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
 
         login_window.user_authenticated.connect(on_login_success)
         login_window.show()

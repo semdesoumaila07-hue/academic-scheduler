@@ -1,6 +1,7 @@
 {
   "demandes": [
     {
+<<<<<<< HEAD
       "enseignant_id": 4,
       "enseignant_nom": "OUATTARA Ibrahim",
       "type": "Mission",
@@ -13,6 +14,18 @@
       "date_creation": "2026-02-13 11:46:21",
       "date_validation": "2026-02-13 11:46:36",
       "validateur": "Responsable Pédagogique"
+=======
+      "enseignant_id": 2,
+      "enseignant_nom": "TRAORE Moussa",
+      "type": "Congé maladie prévu",
+      "date_debut": "2026-02-11",
+      "date_fin": "2026-02-13",
+      "nb_jours": 3,
+      "justification": "maux de vendre",
+      "id": "leave_1_1770806168.956432",
+      "statut": "En attente",
+      "date_creation": "2026-02-11 10:36:08"
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     }
   ],
   "enseignants": [

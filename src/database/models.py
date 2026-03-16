@@ -3,7 +3,11 @@ Modèles SQLAlchemy (ORM) pour toutes les entités.
 """
 from datetime import datetime
 from sqlalchemy import (
+<<<<<<< HEAD
     Column, Integer, String, Float, Boolean, Date, Time,
+=======
+    Column, Integer, String, Float, Boolean, Date, Time, 
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     DateTime, ForeignKey, Enum, Text
 )
 from sqlalchemy.ext.declarative import declarative_base
@@ -90,7 +94,11 @@ class VacationTypeEnum(enum.Enum):
 class UniversityModel(Base):
     """Modèle ORM pour Université."""
     __tablename__ = 'universities'
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(200), nullable=False)
     code = Column(String(10), unique=True, nullable=False)
@@ -99,7 +107,11 @@ class UniversityModel(Base):
     country = Column(String(100), default="Burkina Faso")
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     # Relations
     ufrs = relationship("UFRModel", back_populates="university", cascade="all, delete-orphan")
 
@@ -107,7 +119,11 @@ class UniversityModel(Base):
 class UFRModel(Base):
     """Modèle ORM pour UFR."""
     __tablename__ = 'ufrs'
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(200), nullable=False)
     code = Column(String(10), unique=True, nullable=False)
@@ -115,17 +131,28 @@ class UFRModel(Base):
     university_id = Column(Integer, ForeignKey('universities.id', ondelete='CASCADE'), nullable=False)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+<<<<<<< HEAD
 
     # Relations
     university = relationship("UniversityModel", back_populates="ufrs")
     programs = relationship("ProgramModel", back_populates="ufr", cascade="all, delete-orphan")
     teachers = relationship("TeacherModel", back_populates="ufr", cascade="all, delete-orphan")
+=======
+    
+    # Relations
+    university = relationship("UniversityModel", back_populates="ufrs")
+    programs = relationship("ProgramModel", back_populates="ufr", cascade="all, delete-orphan")
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
 
 
 class ProgramModel(Base):
     """Modèle ORM pour Programme/Parcours."""
     __tablename__ = 'programs'
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(200), nullable=False)
     code = Column(String(10), unique=True, nullable=False)
@@ -134,7 +161,11 @@ class ProgramModel(Base):
     ufr_id = Column(Integer, ForeignKey('ufrs.id', ondelete='CASCADE'), nullable=False)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     # Relations
     ufr = relationship("UFRModel", back_populates="programs")
     cohorts = relationship("CohortModel", back_populates="program", cascade="all, delete-orphan")
@@ -143,18 +174,30 @@ class ProgramModel(Base):
 class CohortModel(Base):
     """Modèle ORM pour Cohorte/Classe."""
     __tablename__ = 'cohorts'
+<<<<<<< HEAD
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(200), nullable=False)
     academic_year = Column(String(20), nullable=False)
     semester = Column(Integer, nullable=False)
+=======
+    
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(200), nullable=False)
+    academic_year = Column(String(20), nullable=False)  # Ex: "2025-2026"
+    semester = Column(Integer, nullable=False)  # 1 ou 2
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     student_count = Column(Integer, nullable=False)
     program_id = Column(Integer, ForeignKey('programs.id', ondelete='CASCADE'), nullable=False)
     start_date = Column(Date, nullable=False)
     end_date = Column(Date, nullable=False)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     # Relations
     program = relationship("ProgramModel", back_populates="cohorts")
     students = relationship("StudentModel", back_populates="cohort", cascade="all, delete-orphan")
@@ -165,7 +208,11 @@ class CohortModel(Base):
 class TeacherModel(Base):
     """Modèle ORM pour Enseignant."""
     __tablename__ = 'teachers'
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     id = Column(Integer, primary_key=True, autoincrement=True)
     full_name = Column(String(200), nullable=False)
     email = Column(String(100), unique=True, nullable=False)
@@ -174,12 +221,19 @@ class TeacherModel(Base):
     max_hours_per_week = Column(Integer, default=40)
     max_hours_per_day = Column(Integer, default=8)
     status = Column(Enum(TeacherStatusEnum), nullable=False)
+<<<<<<< HEAD
     ufr_id = Column(Integer, ForeignKey('ufrs.id', ondelete='SET NULL'), nullable=True)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
 
     # Relations
     ufr = relationship("UFRModel", back_populates="teachers")
+=======
+    created_at = Column(DateTime, default=datetime.now)
+    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    
+    # Relations
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     activities = relationship("AcademicActivityModel", back_populates="teacher")
     schedule_slots = relationship("ScheduleSlotModel", back_populates="teacher")
     leave_requests = relationship("LeaveRequestModel", back_populates="teacher", cascade="all, delete-orphan")
@@ -190,7 +244,11 @@ class TeacherModel(Base):
 class StudentModel(Base):
     """Modèle ORM pour Étudiant."""
     __tablename__ = 'students'
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     id = Column(Integer, primary_key=True, autoincrement=True)
     full_name = Column(String(200), nullable=False)
     student_id = Column(String(50), unique=True, nullable=False)
@@ -200,7 +258,11 @@ class StudentModel(Base):
     cohort_id = Column(Integer, ForeignKey('cohorts.id', ondelete='CASCADE'), nullable=False)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     # Relations
     cohort = relationship("CohortModel", back_populates="students")
 
@@ -208,24 +270,41 @@ class StudentModel(Base):
 class AcademicActivityModel(Base):
     """Modèle ORM pour Activité Académique."""
     __tablename__ = 'academic_activities'
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(200), nullable=False)
     code = Column(String(20), unique=True, nullable=False)
     type = Column(Enum(ActivityTypeEnum), nullable=False)
+<<<<<<< HEAD
     volume_hours = Column(Float, nullable=False)
     hours_done = Column(Float, default=0.0)
     charge_factor = Column(Float, default=0.0)
     activation_date = Column(Date)
     deadline = Column(Date)
     period = Column(Integer, default=0)
+=======
+    volume_hours = Column(Float, nullable=False)  # Ci
+    hours_done = Column(Float, default=0.0)  # H(t)
+    charge_factor = Column(Float, default=0.0)  # U(τi)
+    activation_date = Column(Date)  # ri
+    deadline = Column(Date)  # Di
+    period = Column(Integer, default=0)  # Ti
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     priority = Column(Enum(PriorityEnum), default=PriorityEnum.NORMALE)
     status = Column(Enum(ActivityStatusEnum), default=ActivityStatusEnum.PENDING)
     cohort_id = Column(Integer, ForeignKey('cohorts.id', ondelete='CASCADE'), nullable=False)
     teacher_id = Column(Integer, ForeignKey('teachers.id', ondelete='SET NULL'))
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     # Relations
     cohort = relationship("CohortModel", back_populates="activities")
     teacher = relationship("TeacherModel", back_populates="activities")
@@ -235,7 +314,11 @@ class AcademicActivityModel(Base):
 class ScheduleSlotModel(Base):
     """Modèle ORM pour Créneau Horaire."""
     __tablename__ = 'schedule_slots'
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     id = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(Date, nullable=False)
     start_time = Column(Time, nullable=False)
@@ -249,13 +332,18 @@ class ScheduleSlotModel(Base):
     notes = Column(Text)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     # Relations
     activity = relationship("AcademicActivityModel", back_populates="schedule_slots")
     teacher = relationship("TeacherModel", back_populates="schedule_slots")
     cohort = relationship("CohortModel", back_populates="schedule_slots")
 
 
+<<<<<<< HEAD
 
 
 class RoomModel(Base):
@@ -274,6 +362,12 @@ class LeaveRequestModel(Base):
     """Modèle ORM pour Demande de Congé."""
     __tablename__ = 'leave_requests'
 
+=======
+class LeaveRequestModel(Base):
+    """Modèle ORM pour Demande de Congé."""
+    __tablename__ = 'leave_requests'
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     id = Column(Integer, primary_key=True, autoincrement=True)
     teacher_id = Column(Integer, ForeignKey('teachers.id', ondelete='CASCADE'), nullable=False)
     start_date = Column(Date, nullable=False)
@@ -288,22 +382,36 @@ class LeaveRequestModel(Base):
     rejection_reason = Column(Text)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     # Relations
     teacher = relationship("TeacherModel", back_populates="leave_requests")
 
 
 class TeacherAvailabilityModel(Base):
+<<<<<<< HEAD
     """Modèle ORM pour créneau de disponibilité hebdomadaire d'un enseignant."""
+=======
+    """Modèle ORM pour créneau de disponibilité hebdomadaire d'un enseignant (jour + plage horaire)."""
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     __tablename__ = 'teacher_availability'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     teacher_id = Column(Integer, ForeignKey('teachers.id', ondelete='CASCADE'), nullable=False)
+<<<<<<< HEAD
     day_of_week = Column(Integer, nullable=False)
     start_time = Column(Time, nullable=False)
     end_time = Column(Time, nullable=False)
     period_start = Column(Date, nullable=False)
     period_end = Column(Date, nullable=False)
+=======
+    day_of_week = Column(Integer, nullable=False)  # 0=lundi, 6=dimanche
+    start_time = Column(Time, nullable=False)
+    end_time = Column(Time, nullable=False)
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     created_at = Column(DateTime, default=datetime.now)
 
     teacher = relationship("TeacherModel", back_populates="availability_slots")
@@ -341,7 +449,11 @@ class TeacherConstraintReportModel(Base):
 class AcademicCalendarModel(Base):
     """Modèle ORM pour Calendrier Académique."""
     __tablename__ = 'academic_calendars'
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(200), nullable=False)
     academic_year = Column(String(20), unique=True, nullable=False)
@@ -351,7 +463,11 @@ class AcademicCalendarModel(Base):
     semester_count = Column(Integer, default=2)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     # Relations
     holidays = relationship("HolidayModel", back_populates="calendar", cascade="all, delete-orphan")
     vacation_periods = relationship("VacationPeriodModel", back_populates="calendar", cascade="all, delete-orphan")
@@ -360,7 +476,11 @@ class AcademicCalendarModel(Base):
 class HolidayModel(Base):
     """Modèle ORM pour Jour Férié."""
     __tablename__ = 'holidays'
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(200), nullable=False)
     date = Column(Date, nullable=False)
@@ -369,7 +489,11 @@ class HolidayModel(Base):
     description = Column(Text)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     # Relations
     calendar = relationship("AcademicCalendarModel", back_populates="holidays")
 
@@ -377,7 +501,11 @@ class HolidayModel(Base):
 class VacationPeriodModel(Base):
     """Modèle ORM pour Période de Vacances."""
     __tablename__ = 'vacation_periods'
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(200), nullable=False)
     start_date = Column(Date, nullable=False)
@@ -387,13 +515,21 @@ class VacationPeriodModel(Base):
     description = Column(Text)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     # Relations
     calendar = relationship("AcademicCalendarModel", back_populates="vacation_periods")
 
 
 # ====================== AUTH / RBAC MODELS ======================
 
+<<<<<<< HEAD
+=======
+# Association tables
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
 from sqlalchemy import Table
 
 role_permissions = Table(
@@ -410,7 +546,11 @@ user_roles = Table(
 
 
 class PermissionModel(Base):
+<<<<<<< HEAD
     """Modèle ORM pour Permission."""
+=======
+    """Modèle ORM pour Permission (ex: manage_structure, manage_calendar)."""
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     __tablename__ = 'permissions'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -420,7 +560,11 @@ class PermissionModel(Base):
 
 
 class RoleModel(Base):
+<<<<<<< HEAD
     """Modèle ORM pour Role."""
+=======
+    """Modèle ORM pour Role (ex: Admin, Planner)."""
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     __tablename__ = 'roles'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -440,6 +584,7 @@ class UserModel(Base):
     email = Column(String(120), unique=True, nullable=False)
     password_hash = Column(String(200), nullable=False)
     is_active = Column(Boolean, default=True)
+<<<<<<< HEAD
     is_locked = Column(Boolean, default=False)
     login_attempts = Column(Integer, default=0)
     locked_at = Column(DateTime, nullable=True)
@@ -447,10 +592,25 @@ class UserModel(Base):
 
     ufr_id = Column(Integer, ForeignKey('ufrs.id', ondelete='SET NULL'), nullable=True)
     program_id = Column(Integer, ForeignKey('programs.id', ondelete='SET NULL'), nullable=True)
+=======
+    created_at = Column(DateTime, default=datetime.now)
+
+    # Optional scope: user can be responsible for a specific UFR or Program
+    ufr_id = Column(Integer, ForeignKey('ufrs.id', ondelete='SET NULL'), nullable=True)
+    program_id = Column(Integer, ForeignKey('programs.id', ondelete='SET NULL'), nullable=True)
+    # Lien optionnel vers un enseignant (pour rôle Enseignant)
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     teacher_id = Column(Integer, ForeignKey('teachers.id', ondelete='SET NULL'), nullable=True)
 
     roles = relationship('RoleModel', secondary=user_roles, backref='users')
 
+<<<<<<< HEAD
     ufr = relationship('UFRModel')
     program = relationship('ProgramModel')
     teacher = relationship('TeacherModel')
+=======
+    # Relationships to scope entities
+    ufr = relationship('UFRModel')
+    program = relationship('ProgramModel')
+    teacher = relationship('TeacherModel')
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f

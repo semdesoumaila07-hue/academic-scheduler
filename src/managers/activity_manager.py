@@ -41,11 +41,19 @@ class ActivityManager:
         self.cohort_repo = CohortRepository(session)
         self.delay_calculator = DelayCalculator(session)
     
+<<<<<<< HEAD
     # @require_permission('manage_activities')  # ⚠️ TEMPORAIREMENT DÉSACTIVÉ
     def create_activity(self, name: str, code: str, activity_type: Union[ActivityTypeEnum, str],
                        volume_hours: float, cohort_id: int, teacher_id: int = None,
                        activation_date: date = None, deadline: date = None,
                        priority: Union[PriorityEnum, int, str] = None,
+=======
+    @require_permission('manage_activities')
+    def create_activity(self, name: str, code: str, activity_type: ActivityTypeEnum,
+                       volume_hours: float, cohort_id: int, teacher_id: int = None,
+                       activation_date: date = None, deadline: date = None,
+                       priority: Union[PriorityEnum, int] = None,
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
                        current_user: Any = None) -> Dict:
         """
         Crée une nouvelle activité académique.
@@ -53,17 +61,26 @@ class ActivityManager:
         Args:
             name: Nom de l'activité
             code: Code unique
+<<<<<<< HEAD
             activity_type: Type d'activité (ActivityTypeEnum ou string "CM", "TD", "TP")
+=======
+            activity_type: Type d'activité
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
             volume_hours: Volume horaire total (Ci)
             cohort_id: ID de la cohorte
             teacher_id: ID de l'enseignant (optionnel)
             activation_date: Date d'activation (ri)
             deadline: Date limite (Di)
+<<<<<<< HEAD
             priority: Priorité (PriorityEnum, int ou string)
+=======
+            priority: Priorité (PriorityEnum ou int, par défaut NORMALE)
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
             
         Returns:
             Dictionnaire avec le résultat
         """
+<<<<<<< HEAD
         # ✅ Convertir activity_type si c'est une string
         if isinstance(activity_type, str):
             try:
@@ -98,13 +115,25 @@ class ActivityManager:
                 "Interdite": PriorityEnum.BASSE
             }
             priority = priority_mapping.get(priority, PriorityEnum.NORMALE)
+=======
+        # Convertir la priorité si nécessaire
+        if priority is None:
+            priority = PriorityEnum.NORMALE
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         elif isinstance(priority, int):
             # Convertir int en PriorityEnum (ancien format)
             priority_map = {1: PriorityEnum.BASSE, 2: PriorityEnum.NORMALE, 3: PriorityEnum.HAUTE, 4: PriorityEnum.URGENTE}
             priority = priority_map.get(priority, PriorityEnum.NORMALE)
         
+<<<<<<< HEAD
         # SUPPRESSION de la validation d'existence de la cohorte
         # On accepte n'importe quel ID de cohorte, même s'il n'existe pas dans la base
+=======
+        # Vérifier que la cohorte existe
+        cohort = self.cohort_repo.get_by_id(cohort_id)
+        if not cohort:
+            return {'success': False, 'error': 'Cohorte introuvable'}
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
 
         # Vérifier le périmètre : si l'utilisateur est scindé par UFR/program, il
         # ne peut créer des activités que pour son périmètre (sauf Admin)
@@ -112,9 +141,24 @@ class ActivityManager:
             user_roles = [getattr(r, 'name', '') for r in getattr(current_user, 'roles', [])]
             is_admin = any(r.lower() == 'admin' for r in user_roles)
             if not is_admin:
+<<<<<<< HEAD
                 # Vérifier que l'utilisateur a le droit de créer dans cette cohorte
                 # (code commenté car dépend de votre logique métier)
                 pass
+=======
+                # cohort.program may be loaded; get its ufr id
+                program = getattr(cohort, 'program', None)
+                target_ufr = getattr(program, 'ufr_id', None) if program else None
+                if getattr(current_user, 'ufr_id', None) is None and getattr(current_user, 'program_id', None) is None:
+                    return {'success': False, 'error': 'Utilisateur non assigné à un UFR/Programme'}
+                allowed = False
+                if getattr(current_user, 'ufr_id', None) is not None and getattr(current_user, 'ufr_id', None) == target_ufr:
+                    allowed = True
+                if getattr(current_user, 'program_id', None) is not None and getattr(current_user, 'program_id', None) == getattr(program, 'id', None):
+                    allowed = True
+                if not allowed:
+                    return {'success': False, 'error': 'Permission refusée : hors périmètre UFR/Programme'}
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         
         # Vérifier l'enseignant si fourni
         if teacher_id:
@@ -130,6 +174,7 @@ class ActivityManager:
                 'error': f'Une activité avec le code {code} existe déjà'
             }
         
+<<<<<<< HEAD
         # Le type d'activité est maintenant un ActivityTypeEnum
         type_for_entity = activity_type
         
@@ -146,6 +191,20 @@ class ActivityManager:
         #     return {'success': False, 'error': error}
         
         # ✅ Créer directement dans la base sans passer par l'entité
+=======
+        # Créer l'entité et valider (convertir ActivityTypeEnum vers ActivityType)
+        type_for_entity = ActivityType(activity_type.value) if hasattr(activity_type, 'value') else activity_type
+        activity = AcademicActivity(
+            name=name, code=code, type=type_for_entity,
+            volume_hours=volume_hours, cohort_id=cohort_id,
+            teacher_id=teacher_id, activation_date=activation_date,
+            deadline=deadline, priority=priority
+        )
+        
+        is_valid, error = activity.validate()
+        if not is_valid:
+            return {'success': False, 'error': error}
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         
         # Créer dans la base de données
         activity_model = self.activity_repo.create(

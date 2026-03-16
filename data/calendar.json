@@ -2,8 +2,11 @@
   "calendars": [
     {
       "id": 1,
+<<<<<<< HEAD
       "universite_nom": "Université Norbert Zongo (UNZ)",
       "universite_id": "univ_1_1771408351.183024",
+=======
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
       "annee_academique": "2025-2026",
       "heures_cours_par_jour": 8,
       "semestre1_debut": "01/10/2025",
@@ -18,6 +21,7 @@
         "Vendredi",
         "Samedi"
       ],
+<<<<<<< HEAD
       "d_effectif": 261,
       "volume_horaire_total": 2088,
       "date_creation": "2026-02-18T12:15:16.178583"
@@ -31,6 +35,18 @@
       "semestre1_fin": "30/06/2026",
       "semestre2_debut": "01/07/2026",
       "semestre2_fin": "30/07/2026",
+=======
+      "d_effectif": 230,
+      "volume_horaire_total": 1840
+    },
+    {
+      "annee_academique": "2025-2026",
+      "heures_cours_par_jour": 8,
+      "semestre1_debut": "11/02/2026",
+      "semestre1_fin": "11/06/2026",
+      "semestre2_debut": "11/07/2026",
+      "semestre2_fin": "11/11/2026",
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
       "jours_ouvrables": [
         "Lundi",
         "Mardi",
@@ -39,9 +55,15 @@
         "Vendredi",
         "Samedi"
       ],
+<<<<<<< HEAD
       "d_effectif": 256,
       "volume_horaire_total": 2048,
       "date_creation": "2026-02-21T22:51:45.072264",
+=======
+      "d_effectif": 210,
+      "volume_horaire_total": 1680,
+      "date_creation": "2026-02-11T10:34:53.722194",
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
       "id": 2
     }
   ],
@@ -73,6 +95,7 @@
       "date": "25/12/2025",
       "type": "Religieux",
       "recurrent": true
+<<<<<<< HEAD
     },
     {
       "nom": "Fête de l'independance",
@@ -80,6 +103,8 @@
       "recurrent": true,
       "type": "National",
       "id": 5
+=======
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     }
   ],
   "vacations": [

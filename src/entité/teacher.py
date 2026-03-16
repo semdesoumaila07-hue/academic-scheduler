@@ -19,7 +19,10 @@ class Teacher:
         max_hours_per_week: Nombre max d'heures par semaine
         max_hours_per_day: Nombre max d'heures par jour
         status: Statut (permanent, vacataire, etc.)
+<<<<<<< HEAD
         ufr_id: ID de l'UFR de rattachement
+=======
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         created_at: Date de création
         updated_at: Date de dernière modification
     """
@@ -33,7 +36,10 @@ class Teacher:
         phone: Optional[str] = None,
         max_hours_per_week: int = 40,
         max_hours_per_day: int = 8,
+<<<<<<< HEAD
         ufr_id: Optional[int] = None,
+=======
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         id: Optional[int] = None,
         created_at: Optional[datetime] = None,
         updated_at: Optional[datetime] = None
@@ -49,7 +55,10 @@ class Teacher:
             phone: Téléphone
             max_hours_per_week: Heures max par semaine
             max_hours_per_day: Heures max par jour
+<<<<<<< HEAD
             ufr_id: ID de l'UFR de rattachement
+=======
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
             id: Identifiant (None pour nouvel enseignant)
             created_at: Date de création
             updated_at: Date de modification
@@ -62,7 +71,10 @@ class Teacher:
         self.max_hours_per_week = max_hours_per_week
         self.max_hours_per_day = max_hours_per_day
         self.status = status
+<<<<<<< HEAD
         self.ufr_id = ufr_id
+=======
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         self.created_at = created_at or datetime.now()
         self.updated_at = updated_at or datetime.now()
     

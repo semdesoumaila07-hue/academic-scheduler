@@ -17,7 +17,11 @@ from sqlalchemy.orm import Session
 
 from ..database.models import (
     AcademicActivityModel, ScheduleSlotModel, TeacherModel,
+<<<<<<< HEAD
     CohortModel, ActivityStatusEnum, TeacherAvailabilityModel
+=======
+    CohortModel, ActivityStatusEnum
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
 )
 from ..database.repositories import (
     ActivityRepository, ScheduleRepository, TeacherRepository,
@@ -160,6 +164,7 @@ class PfairScheduler:
             slot_duration = 2  # 2 heures par créneau
             
             for activity, alpha, delay in urgent_activities:
+<<<<<<< HEAD
                 # Recuperer l'enseignant
                 teacher = self.teacher_repo.get_by_id(activity.teacher_id)
                 if not teacher:
@@ -247,6 +252,38 @@ class PfairScheduler:
                     ).first()
                     if rc: room = None
 
+=======
+                # Vérifier disponibilité de l'enseignant
+                teacher = self.teacher_repo.get_by_id(activity.teacher_id)
+                if not teacher:
+                    continue
+                
+                # Créer un créneau
+                slot_start = time(hour=start_hour)
+                slot_end = time(hour=start_hour + slot_duration)
+                
+                # Vérifier les conflits
+                if self.schedule_repo.check_conflict(
+                    current_date, slot_start, slot_end,
+                    teacher_id=teacher.id,
+                    cohort_id=cohort_id
+                ):
+                    conflicts.append({
+                        'date': current_date,
+                        'activity': activity.name,
+                        'reason': 'Conflit horaire'
+                    })
+                    continue
+                
+                # Assigner une salle disponible
+                room = None
+                if available_rooms:
+                    available = self.schedule_repo.get_available_rooms(
+                        current_date, slot_start, slot_end, available_rooms
+                    )
+                    if available:
+                        room = available[0]
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
                 
                 # Créer le créneau
                 slot = ScheduleSlotModel(

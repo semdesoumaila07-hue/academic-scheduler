@@ -10,7 +10,10 @@ from sqlalchemy.orm import Session
 from ..database.repositories import LeaveRequestRepository, ScheduleRepository, TeacherRepository
 from ..database.models import LeaveRequestModel, LeaveStatusEnum, LeaveTypeEnum
 from .calendar_service import CalendarService
+<<<<<<< HEAD
 from .auth_service import require_permission
+=======
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
 
 
 class LeaveService:
@@ -34,9 +37,14 @@ class LeaveService:
         self.teacher_repo = TeacherRepository(session)
         self.calendar_service = CalendarService(session)
     
+<<<<<<< HEAD
     @require_permission('submit_leave')
     def submit_leave_request(self, teacher_id: int, start_date: date, end_date: date,
                             leave_type: LeaveTypeEnum, reason: str, current_user=None) -> Dict:
+=======
+    def submit_leave_request(self, teacher_id: int, start_date: date, end_date: date,
+                            leave_type: LeaveTypeEnum, reason: str) -> Dict:
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         """
         Soumet une nouvelle demande de congé.
         
@@ -94,8 +102,12 @@ class LeaveService:
             'message': 'Demande de congé soumise avec succès'
         }
     
+<<<<<<< HEAD
     @require_permission('approve_leave')
     def approve_leave_request(self, request_id: int, approver_email: str, current_user=None) -> Dict:
+=======
+    def approve_leave_request(self, request_id: int, approver_email: str) -> Dict:
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         """
         Approuve une demande de congé et bloque les créneaux concernés.
         
@@ -220,6 +232,7 @@ class LeaveService:
             'message': 'Demande annulée'
         }
     
+<<<<<<< HEAD
     def get_all_requests(self) -> List[LeaveRequestModel]:
         """
         Récupère toutes les demandes de congé (pour affichage dans l'onglet).
@@ -229,6 +242,8 @@ class LeaveService:
         """
         return self.leave_repo.get_all(skip=0, limit=500)
 
+=======
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     def get_pending_requests(self) -> List[LeaveRequestModel]:
         """
         Récupère toutes les demandes en attente.

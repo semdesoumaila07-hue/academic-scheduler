@@ -197,6 +197,7 @@ class DataManager:
                             except (ValueError, TypeError):
                                 pass
         return max_id + 1
+<<<<<<< HEAD
         def add_teacher_availability(self, teacher_id: int, day_of_week: int, start_time, end_time, period_start, period_end) -> dict:
             """
             Enregistre une disponibilité récurrente pour un enseignant en base de données.
@@ -236,6 +237,9 @@ class DataManager:
                 return {"id": slot.id, "success": True}
             except Exception as e:
                 return {"success": False, "error": str(e)}
+=======
+
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     # --- Activities (activities.csv) ---
 
     def _load_activities(self) -> None:
@@ -329,7 +333,27 @@ class DataManager:
     def _load_leaves(self) -> None:
         if self._leaves_file.exists():
             with open(self._leaves_file, "r", encoding="utf-8") as f:
+<<<<<<< HEAD
                 self._leaves = json.load(f)
+=======
+                data = json.load(f)
+            # Supporter plusieurs formats de fichier :
+            # - liste directe de demandes : [ {..}, {..} ]
+            # - ancien format avec racine contenant 'demandes' : { 'demandes': [..], ... }
+            if isinstance(data, dict):
+                if "demandes" in data and isinstance(data["demandes"], list):
+                    self._leaves = data["demandes"]
+                elif "leaves" in data and isinstance(data["leaves"], list):
+                    self._leaves = data["leaves"]
+                else:
+                    # si dict mais pas la clé attendue, essayer de détecter une liste de valeurs
+                    possible = [v for v in data.values() if isinstance(v, list)]
+                    self._leaves = possible[0] if possible else []
+            elif isinstance(data, list):
+                self._leaves = data
+            else:
+                self._leaves = []
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         else:
             self._leaves = []
 
@@ -338,7 +362,33 @@ class DataManager:
             json.dump(self._leaves, f, ensure_ascii=False, indent=2, default=_json_serial)
 
     def get_leaves(self) -> List[SimpleNamespace]:
+<<<<<<< HEAD
         return [SimpleNamespace(**l) for l in self._leaves]
+=======
+        result: List[SimpleNamespace] = []
+        for l in self._leaves:
+            if not isinstance(l, dict):
+                # ignorer les entrées non-mappables
+                continue
+            # Normaliser les noms de champs pour compatibilité (FR/EN/anciens formats)
+            start = l.get("start_date") or l.get("date_debut") or l.get("date_creation") or l.get("start")
+            end = l.get("end_date") or l.get("date_fin") or l.get("end")
+            typ = l.get("type") or l.get("type_leave") or l.get("type_conge")
+            reason = l.get("reason") or l.get("justification") or l.get("raison") or l.get("motif")
+            status = l.get("status") or l.get("statut") or l.get("etat")
+            teacher_id = l.get("teacher_id") or l.get("enseignant_id") or l.get("enseignant")
+            result.append(SimpleNamespace(
+                id=l.get("id"),
+                teacher_id=teacher_id,
+                start_date=start,
+                end_date=end,
+                type=typ,
+                reason=reason,
+                status=status,
+                raw=l,
+            ))
+        return result
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
 
     def add_leave(self, teacher_id: str, start: str, end: str, leave_type: str, reason: str) -> Dict:
         lid = f"leave_{len(self._leaves) + 1}"

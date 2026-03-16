@@ -102,6 +102,7 @@ class TeacherDashboard(QMainWindow):
         self.avail_end = QTimeEdit()
         self.avail_end.setTime(QTime(18, 0))
         row_avail.addWidget(self.avail_end)
+<<<<<<< HEAD
         # Ajout des champs période
         row_avail.addWidget(QLabel("Période :"))
         self.avail_period_start = QDateEdit()
@@ -112,6 +113,8 @@ class TeacherDashboard(QMainWindow):
         self.avail_period_end.setCalendarPopup(True)
         self.avail_period_end.setDate(date.today() + timedelta(days=14))
         row_avail.addWidget(self.avail_period_end)
+=======
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         btn_add_avail = QPushButton("Ajouter créneau")
         btn_add_avail.clicked.connect(self.on_add_availability)
         row_avail.addWidget(btn_add_avail)
@@ -229,6 +232,7 @@ class TeacherDashboard(QMainWindow):
         qend = self.avail_end.time()
         start_t = time(qstart.hour(), qstart.minute())
         end_t = time(qend.hour(), qend.minute())
+<<<<<<< HEAD
         # Ajout des dates de début et fin (correction)
         period_start = self.avail_period_start.date().toPyDate()
         period_end = self.avail_period_end.date().toPyDate()
@@ -238,6 +242,11 @@ class TeacherDashboard(QMainWindow):
         if period_end < period_start:
             QMessageBox.warning(self, "Validation", "La date de fin doit être après la date de début.")
             return
+=======
+        if end_t <= start_t:
+            QMessageBox.warning(self, "Validation", "L'heure de fin doit être après l'heure de début.")
+            return
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         session = db_manager.get_session()
         try:
             repo = TeacherAvailabilityRepository(session)
@@ -246,8 +255,11 @@ class TeacherDashboard(QMainWindow):
                 day_of_week=day,
                 start_time=start_t,
                 end_time=end_t,
+<<<<<<< HEAD
                 period_start=period_start,
                 period_end=period_end
+=======
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
             )
             self.load_availability()
         finally:

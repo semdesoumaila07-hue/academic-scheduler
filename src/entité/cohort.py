@@ -13,7 +13,11 @@ class Cohort:
         id: Identifiant unique
         name: Nom de la cohorte
         academic_year: Année académique (ex: "2025-2026")
+<<<<<<< HEAD
         semester: Numéro du semestre (1-13)
+=======
+        semester: Numéro du semestre
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         student_count: Nombre d'étudiants
         program_id: ID du programme
         start_date: Date de début
@@ -22,11 +26,14 @@ class Cohort:
         updated_at: Date de dernière modification
     """
     
+<<<<<<< HEAD
     # Semestres valides selon le niveau
     # Licence 1 → S1,S2 | Licence 2 → S3,S4 | Licence 3 → S5,S6
     # Master 1  → 7,8   | Master 2  → 9,10  | Doctorat  → 11,12,13
     VALID_SEMESTERS = list(range(1, 14))  # 1 à 13
 
+=======
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
     def __init__(
         self,
         name: str,
@@ -40,6 +47,24 @@ class Cohort:
         created_at: Optional[datetime] = None,
         updated_at: Optional[datetime] = None
     ):
+<<<<<<< HEAD
+=======
+        """
+        Initialise une cohorte.
+        
+        Args:
+            name: Nom de la cohorte
+            academic_year: Année académique
+            semester: Numéro du semestre (1-2)
+            student_count: Nombre d'étudiants
+            program_id: ID du programme
+            start_date: Date de début
+            end_date: Date de fin
+            id: Identifiant (None pour nouvelle cohorte)
+            created_at: Date de création
+            updated_at: Date de modification
+        """
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         self.id = id
         self.name = name
         self.academic_year = academic_year
@@ -55,10 +80,27 @@ class Cohort:
         """
         Calcule le retard global de la cohorte.
         À implémenter avec les activités académiques.
+<<<<<<< HEAD
         """
         return 0.0
     
     def to_dict(self) -> dict:
+=======
+        
+        Returns:
+            Retard global en heures
+        """
+        # TODO: Implémenter avec les activités
+        return 0.0
+    
+    def to_dict(self) -> dict:
+        """
+        Convertit la cohorte en dictionnaire.
+        
+        Returns:
+            Dictionnaire représentant la cohorte
+        """
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         return {
             'id': self.id,
             'name': self.name,
@@ -74,6 +116,18 @@ class Cohort:
     
     @classmethod
     def from_dict(cls, data: dict) -> 'Cohort':
+<<<<<<< HEAD
+=======
+        """
+        Crée une cohorte depuis un dictionnaire.
+        
+        Args:
+            data: Dictionnaire de données
+            
+        Returns:
+            Instance de Cohort
+        """
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         return cls(
             id=data.get('id'),
             name=data['name'],
@@ -88,12 +142,23 @@ class Cohort:
         )
     
     def __str__(self) -> str:
+<<<<<<< HEAD
         return f"{self.name} - {self.academic_year} S{self.semester}"
     
     def __repr__(self) -> str:
         return f"Cohort(id={self.id}, name='{self.name}', semester={self.semester})"
     
     def validate(self) -> tuple:
+=======
+        """Représentation textuelle de la cohorte."""
+        return f"{self.name} - {self.academic_year} S{self.semester}"
+    
+    def __repr__(self) -> str:
+        """Représentation technique de la cohorte."""
+        return f"Cohort(id={self.id}, name='{self.name}', semester={self.semester})"
+    
+    def validate(self) -> tuple[bool, Optional[str]]:
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         """
         Valide les données de la cohorte.
         
@@ -106,11 +171,16 @@ class Cohort:
         if not self.academic_year:
             return False, "L'année académique est requise"
         
+<<<<<<< HEAD
         # ✅ CORRIGÉ : accepte les semestres 1 à 13
         # Licence 1→S1,S2 | L2→S3,S4 | L3→S5,S6
         # Master 1→7,8    | M2→9,10   | Doctorat→11,12,13
         if self.semester not in self.VALID_SEMESTERS:
             return False, f"Le semestre doit être entre 1 et 13 (valeur reçue : {self.semester})"
+=======
+        if self.semester not in [1, 2]:
+            return False, "Le semestre doit être 1 ou 2"
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         
         if not self.student_count or self.student_count <= 0:
             return False, "Le nombre d'étudiants doit être supérieur à 0"

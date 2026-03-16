@@ -92,16 +92,24 @@ CREATE TABLE IF NOT EXISTS teachers (
     max_hours_per_week INTEGER DEFAULT 40,
     max_hours_per_day INTEGER DEFAULT 8,
     status VARCHAR(50) NOT NULL, -- Permanent, Vacataire, Invité
+<<<<<<< HEAD
     ufr_id INTEGER,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (ufr_id) REFERENCES ufrs(id) ON DELETE SET NULL
+=======
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
 );
 
 CREATE INDEX idx_teachers_email ON teachers(email);
 CREATE INDEX idx_teachers_speciality ON teachers(speciality);
 CREATE INDEX idx_teachers_status ON teachers(status);
+<<<<<<< HEAD
 CREATE INDEX idx_teachers_ufr ON teachers(ufr_id);
+=======
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
 
 -- ================================================================
 -- TABLE: students

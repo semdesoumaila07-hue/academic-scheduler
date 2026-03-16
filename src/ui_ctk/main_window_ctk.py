@@ -6,6 +6,7 @@ Structure, Calendrier, Activités, Ordonnancement, Analyse
 """
 import customtkinter as ctk
 from ..data.data_manager import data_manager
+<<<<<<< HEAD
 from ..database.db_manager import db_manager
 from ..services.dashboard_service import DashboardService
 from ..managers.structure_manager import StructureManager
@@ -15,10 +16,17 @@ from .pages import StructurePage, TeachersPage, ActivitiesPage
 
 class MainWindowCTK(ctk.CTkFrame):
     """Fenêtre principale conforme à la conception (DB + CustomTkinter)."""
+=======
+
+
+class MainWindowCTK(ctk.CTkFrame):
+    """Fenêtre principale conforme à la conception (CustomTkinter + JSON/CSV)."""
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
 
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
         self.configure(fg_color="transparent")
+<<<<<<< HEAD
         
         # Initialiser la base de données
         try:
@@ -35,11 +43,14 @@ class MainWindowCTK(ctk.CTkFrame):
             self.structure_manager = None
             self.activity_manager = None
         
+=======
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         self.init_ui()
 
     def init_ui(self):
         # Layout principal
         self.grid_columnconfigure(1, weight=1)
+<<<<<<< HEAD
         self.grid_rowconfigure(2, weight=1)
 
         # Sidebar gauche
@@ -63,6 +74,21 @@ class MainWindowCTK(ctk.CTkFrame):
         # Séparateur
         sep = ctk.CTkFrame(self.sidebar, height=1, fg_color=("gray80", "gray30"))
         sep.pack(fill="x", padx=8, pady=12)
+=======
+        self.grid_rowconfigure(1, weight=1)
+
+        # Sidebar gauche
+        self.sidebar = ctk.CTkFrame(self, width=220, corner_radius=0, fg_color=("#e9ecef", "#2b2b2b"))
+        self.sidebar.grid(row=0, column=0, rowspan=2, sticky="nsew")
+        self.sidebar.grid_propagate(False)
+
+        # Branding
+        brand_frame = ctk.CTkFrame(self.sidebar, fg_color="transparent")
+        brand_frame.pack(fill="x", padx=16, pady=20)
+        ctk.CTkLabel(brand_frame, text="📘", font=ctk.CTkFont(size=28)).pack(anchor="w")
+        ctk.CTkLabel(brand_frame, text="Pfair Scheduler", font=ctk.CTkFont(size=16, weight="bold")).pack(anchor="w")
+        ctk.CTkLabel(brand_frame, text="Ordonnancement académique", font=ctk.CTkFont(size=11), text_color="gray").pack(anchor="w")
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
 
         # Navigation
         self.nav_buttons = []
@@ -74,13 +100,18 @@ class MainWindowCTK(ctk.CTkFrame):
             ("📅 Calendrier", 4),
             ("🏖️ Congés", 5),
             ("🔄 Ordonnancement", 6),
+<<<<<<< HEAD
             ("📈 Retards", 7),
             ("📋 Rapports", 8),
             ("⏱️ Emplois du temps", 9),
+=======
+            ("📈 Analyse / Retards", 7),
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         ]
         for text, idx in nav_items:
             btn = ctk.CTkButton(
                 self.sidebar, text=text, anchor="w",
+<<<<<<< HEAD
                 fg_color="transparent", hover_color=("#E8F0FF", "#1a3a52"),
                 text_color=("black", "white"),
                 command=lambda i=idx: self.show_page(i)
@@ -146,10 +177,32 @@ class MainWindowCTK(ctk.CTkFrame):
         self.content_frame.grid(row=2, column=1, sticky="nsew", padx=0, pady=0)
         self.content_frame.grid_columnconfigure(0, weight=1)
         self.content_frame.grid_rowconfigure(0, weight=1)
+=======
+                fg_color="transparent", hover_color=("#E3F2FD", "#1a3a52"),
+                command=lambda i=idx: self.show_page(i)
+            )
+            btn.pack(fill="x", padx=8, pady=4)
+            self.nav_buttons.append(btn)
+
+        # Zone contenu
+        self.content_frame = ctk.CTkFrame(self, fg_color="transparent")
+        self.content_frame.grid(row=0, column=1, rowspan=2, sticky="nsew", padx=0, pady=0)
+        self.content_frame.grid_columnconfigure(0, weight=1)
+        self.content_frame.grid_rowconfigure(1, weight=1)
+
+        # Header
+        self.header = ctk.CTkFrame(self.content_frame, height=60, fg_color=("white", "#1a1a1a"), corner_radius=0)
+        self.header.grid(row=0, column=0, sticky="ew", padx=0, pady=0)
+        self.header.grid_propagate(False)
+        self.header.grid_columnconfigure(0, weight=1)
+        self.page_title = ctk.CTkLabel(self.header, text="Dashboard", font=ctk.CTkFont(size=20, weight="bold"))
+        self.page_title.grid(row=0, column=0, sticky="w", padx=24, pady=16)
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
 
         # Pages (stacked)
         self.pages = []
         self.pages.append(self._create_dashboard_page())
+<<<<<<< HEAD
         # Utiliser les pages améliorées avec CRUD complet
         if self.session and self.structure_manager:
             self.pages.append(StructurePage(self.content_frame, self.session, self.structure_manager))
@@ -162,21 +215,33 @@ class MainWindowCTK(ctk.CTkFrame):
             self.pages.append(self._create_structure_page())
             self.pages.append(self._create_teachers_page())
             self.pages.append(self._create_activities_page())
+=======
+        self.pages.append(self._create_structure_page())
+        self.pages.append(self._create_teachers_page())
+        self.pages.append(self._create_activities_page())
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
         self.pages.append(self._create_calendar_page())
         self.pages.append(self._create_leaves_page())
         self.pages.append(self._create_scheduling_page())
         self.pages.append(self._create_analysis_page())
+<<<<<<< HEAD
         self.pages.append(self._create_reports_page())
         self.pages.append(self._create_timetable_page())
 
         for i, p in enumerate(self.pages):
             p.grid(row=0, column=0, sticky="nsew", padx=24, pady=16)
+=======
+
+        for i, p in enumerate(self.pages):
+            p.grid(row=1, column=0, sticky="nsew", padx=24, pady=16)
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
             p.grid_columnconfigure(0, weight=1)
             p.grid_rowconfigure(1, weight=1)
             if i > 0:
                 p.grid_remove()
 
         self.current_page = 0
+<<<<<<< HEAD
         self._update_button_states()
 
     def show_page(self, index: int):
@@ -295,6 +360,60 @@ class MainWindowCTK(ctk.CTkFrame):
         univ_logos = ["🎓 MESRSI", "📚 UNF2", "🏫 UJRZ", "🏛️ UNB", "🎒 UPS", "📖 UBDG"]
         for logo in univ_logos:
             ctk.CTkLabel(footer, text=logo, font=ctk.CTkFont(size=11), text_color="gray").pack(side="left", padx=8)
+=======
+
+    def show_page(self, index: int):
+        titles = ["Dashboard", "Structure", "Enseignants", "Activités", "Calendrier", "Congés", "Ordonnancement", "Analyse"]
+        self.page_title.configure(text=titles[index] if index < len(titles) else "Dashboard")
+        self.pages[self.current_page].grid_remove()
+        self.current_page = index
+        self.pages[index].grid()
+
+    def _create_dashboard_page(self) -> ctk.CTkFrame:
+        """Tableau de bord avec KPIs."""
+        f = ctk.CTkScrollableFrame(self.content_frame, fg_color="transparent")
+        f.grid_columnconfigure(0, weight=1)
+
+        ctk.CTkLabel(f, text="Tableau de bord", font=ctk.CTkFont(size=22, weight="bold")).grid(row=0, column=0, sticky="w", pady=(0, 4))
+        ctk.CTkLabel(f, text="Système d'Ordonnancement Académique P-équitable", text_color="gray").grid(row=1, column=0, sticky="w", pady=(0, 20))
+
+        # KPIs
+        univs = data_manager.get_universities()
+        teachers = data_manager.get_teachers()
+        activities = data_manager.get_activities()
+        n_ufr = sum(len(getattr(u, "ufrs", [])) for u in univs)
+        n_classes = 0
+        n_students = 0
+        for u in univs:
+            for ufr in getattr(u, "ufrs", []):
+                for p in getattr(ufr, "parcours", []):
+                    cls = getattr(p, "classes", [])
+                    n_classes += len(cls)
+                    for c in cls:
+                        n_students += getattr(c, "effectif", 0)
+        vol = sum(getattr(a, "volume_hours", 0) for a in activities)
+        done = sum(getattr(a, "hours_done", 0) for a in activities)
+
+        kpis = [
+            ("Universités", str(len(univs)), "#4A90E2"),
+            ("UFR", str(n_ufr), "#7ED321"),
+            ("Enseignants", str(len(teachers)), "#BD10E0"),
+            ("Activités", str(len(activities)), "#F5A623"),
+            ("Classes", str(n_classes), "#BD10E0"),
+            ("Étudiants", str(n_students), "#F8E71C"),
+            ("Heures planifiées", f"{int(done)}h", "#50E3C2"),
+            ("Volume total", f"{int(vol)}h", "#F5A623"),
+        ]
+        kpi_frame = ctk.CTkFrame(f, fg_color="transparent")
+        kpi_frame.grid(row=2, column=0, sticky="ew", pady=10)
+        kpi_frame.grid_columnconfigure((0, 1, 2, 3), weight=1)
+        for i, (label, val, _) in enumerate(kpis):
+            card = ctk.CTkFrame(kpi_frame, fg_color=("#f8f9fa", "#2b2b2b"), corner_radius=8)
+            card.grid(row=i // 4, column=i % 4, padx=8, pady=8, sticky="nsew")
+            card.grid_columnconfigure(0, weight=1)
+            ctk.CTkLabel(card, text=val, font=ctk.CTkFont(size=24, weight="bold")).grid(row=0, column=0, sticky="w", padx=16, pady=(12, 2))
+            ctk.CTkLabel(card, text=label, text_color="gray", font=ctk.CTkFont(size=12)).grid(row=1, column=0, sticky="w", padx=16, pady=(0, 12))
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
 
         return f
 
@@ -373,6 +492,7 @@ class MainWindowCTK(ctk.CTkFrame):
 
     def _create_analysis_page(self) -> ctk.CTkFrame:
         f = ctk.CTkFrame(self.content_frame, fg_color="transparent")
+<<<<<<< HEAD
         f.grid_columnconfigure(0, weight=1)
         ctk.CTkLabel(f, text="Analyse des retards académiques", font=ctk.CTkFont(size=18, weight="bold")).grid(row=0, column=0, sticky="w", pady=(0, 16))
         ctk.CTkLabel(f, text="Indicateurs de retard par activité, classe, parcours, UFR et université.", text_color="gray").grid(row=1, column=0, sticky="w")
@@ -438,3 +558,8 @@ class MainWindowCTK(ctk.CTkFrame):
             ctk.CTkLabel(content, text=desc, text_color="gray", font=ctk.CTkFont(size=11)).grid(row=1, column=0, columnspan=2, sticky="w", pady=(6, 0))
         
         return f
+=======
+        ctk.CTkLabel(f, text="Analyse des retards académiques", font=ctk.CTkFont(size=18, weight="bold")).grid(row=0, column=0, sticky="w", pady=(0, 16))
+        ctk.CTkLabel(f, text="Indicateurs de retard par activité, classe, parcours, UFR et université.", text_color="gray").grid(row=1, column=0, sticky="w")
+        return f
+>>>>>>> a5a03a993e1b9b43f14c093746cbd6265ba0f65f
