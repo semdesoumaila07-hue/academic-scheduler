@@ -1,7 +1,11 @@
 """
 UC9 - Onglet Consultation des Emplois du Temps
 100% SQLite : lit ScheduleSlotModel au lieu de schedules.json
-Correction : _reload_all et _populate_target_combo préservent la sélection actuelle
+
+CORRECTIONS :
+- _reload_all et _populate_target_combo préservent la sélection actuelle
+- Boutons CM / TD / TP / Examen sont désormais des filtres cliquables
+  (ancienne version : simples labels décoratifs sans action)
 """
 import csv
 from datetime import date, datetime, timedelta
@@ -11,10 +15,11 @@ from PyQt5.QtCore import QDate
 from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel,
     QComboBox, QFileDialog, QMessageBox, QFrame,
-    QScrollArea, QGridLayout, QSizePolicy
+    QScrollArea, QGridLayout, QSizePolicy,
+    QDialog, QFormLayout, QTimeEdit, QDateEdit, QLineEdit, QMenu, QAction
 )
-from PyQt5.QtCore import Qt, QSize
-from PyQt5.QtGui import QColor
+from PyQt5.QtCore import Qt, QSize, QTime, pyqtSignal
+from PyQt5.QtGui import QColor, QCursor
 
 from src.database.db_manager import db_manager
 from src.database.models import ScheduleSlotModel
@@ -44,9 +49,13 @@ def _alpha_to_border(alpha):
 
 
 class CourseBlock(QFrame):
-    def __init__(self, slot_data, parent=None):
+    edit_requested   = pyqtSignal(dict)
+    delete_requested = pyqtSignal(dict)
+
+    def __init__(self, slot_data, edit_mode=False, parent=None):
         super().__init__(parent)
         self.slot_data = slot_data
+        self._edit_mode = edit_mode
         bg, fg       = TYPE_COLORS.get(slot_data.get('activity_type', ''), ("#E0E0E0", "#333"))
         border_color = _alpha_to_border(slot_data.get('alpha'))
         self.setStyleSheet(f"""
@@ -62,9 +71,8 @@ class CourseBlock(QFrame):
         layout.setContentsMargins(7, 5, 5, 5)
         layout.setSpacing(2)
 
-        # ── Ligne horaire ──────────────────────────────────────
-        start  = slot_data.get('start', '08:00')
-        end    = slot_data.get('end',   '10:00')
+        start    = slot_data.get('start', '08:00')
+        end      = slot_data.get('end',   '10:00')
         hour_lbl = QLabel(f"⏰ {start} – {end}")
         hour_lbl.setStyleSheet(
             f"color: {fg}; font-weight: bold; font-size: 11px; "
@@ -72,20 +80,17 @@ class CourseBlock(QFrame):
         )
         layout.addWidget(hour_lbl)
 
-        # ── Nom du cours ───────────────────────────────────────
         name_lbl = QLabel(slot_data.get('activity', '—'))
         name_lbl.setStyleSheet(f"color: {fg}; font-weight: bold; font-size: 11px;")
         name_lbl.setWordWrap(True)
         layout.addWidget(name_lbl)
 
-        # ── Type + Salle ───────────────────────────────────────
         act_type = slot_data.get('activity_type', '')
         room     = slot_data.get('room', '')
         info_lbl = QLabel(f"📍 {act_type}  |  {room}")
         info_lbl.setStyleSheet(f"color: {fg}; font-size: 10px;")
         layout.addWidget(info_lbl)
 
-        # ── Enseignant ────────────────────────────────────────
         teach_lbl = QLabel(f"👤 {slot_data.get('teacher', '')}")
         teach_lbl.setStyleSheet("color: #444; font-size: 10px;")
         layout.addWidget(teach_lbl)
@@ -98,6 +103,147 @@ class CourseBlock(QFrame):
             f"Cohorte  : {slot_data.get('cohort', '')}\n"
             f"α        : {slot_data.get('alpha', 'N/A')}"
         )
+        if self._edit_mode:
+            self.setCursor(Qt.PointingHandCursor)
+            self._apply_edit_border()
+            self.setContextMenuPolicy(Qt.CustomContextMenu)
+            self.customContextMenuRequested.connect(self._show_context_menu)
+
+    def _apply_edit_border(self):
+        self.setStyleSheet(self.styleSheet() +
+            "QFrame { outline: 2px dashed #F59E0B; }"
+        )
+
+    def _show_context_menu(self, pos):
+        menu = QMenu(self)
+        act_edit   = menu.addAction("✏️  Modifier ce créneau")
+        menu.addSeparator()
+        act_delete = menu.addAction("🗑️  Supprimer ce créneau")
+        menu.setStyleSheet("QMenu::item { padding: 6px 20px; } ")
+        chosen = menu.exec_(QCursor.pos())
+        if chosen == act_edit:
+            self.edit_requested.emit(self.slot_data)
+        elif chosen == act_delete:
+            self.delete_requested.emit(self.slot_data)
+
+
+# ══════════════════════════════════════════════════════════════════
+# DIALOGUE D'ÉDITION D'UN CRÉNEAU
+# ══════════════════════════════════════════════════════════════════
+
+class SlotEditDialog(QDialog):
+    def __init__(self, slot_data, teachers, parent=None):
+        super().__init__(parent)
+        self.slot_data  = slot_data
+        self.teachers   = teachers
+        self.setWindowTitle("Modifier le créneau")
+        self.setMinimumWidth(420)
+        self.setModal(True)
+        self._build()
+
+    def _build(self):
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(20, 20, 20, 16)
+        layout.setSpacing(14)
+
+        title = QLabel(f"✏️  {self.slot_data.get('activity', '?')}")
+        title.setStyleSheet("font-size:15px; font-weight:bold; color:#1a73e8;")
+        layout.addWidget(title)
+
+        form = QFormLayout()
+        form.setSpacing(10)
+        form.setLabelAlignment(Qt.AlignRight)
+        st = "border:1px solid #ddd; border-radius:5px; padding:0 8px; height:34px;"
+
+        self._date = QDateEdit()
+        self._date.setCalendarPopup(True)
+        self._date.setStyleSheet(st)
+        try:
+            d = self.slot_data.get('date')
+            if isinstance(d, str):
+                d = datetime.fromisoformat(d).date()
+            self._date.setDate(QDate(d.year, d.month, d.day))
+        except Exception:
+            self._date.setDate(QDate.currentDate())
+        form.addRow("Date :", self._date)
+
+        self._start = QTimeEdit()
+        self._start.setDisplayFormat("HH:mm")
+        self._start.setStyleSheet(st)
+        try:
+            h, m = map(int, self.slot_data.get('start','08:00').split(':'))
+            self._start.setTime(QTime(h, m))
+        except Exception:
+            self._start.setTime(QTime(8, 0))
+        form.addRow("Heure début :", self._start)
+
+        self._end = QTimeEdit()
+        self._end.setDisplayFormat("HH:mm")
+        self._end.setStyleSheet(st)
+        try:
+            h, m = map(int, self.slot_data.get('end','10:00').split(':'))
+            self._end.setTime(QTime(h, m))
+        except Exception:
+            self._end.setTime(QTime(10, 0))
+        form.addRow("Heure fin :", self._end)
+
+        self._room = QLineEdit(self.slot_data.get('room', ''))
+        self._room.setStyleSheet(st)
+        self._room.setPlaceholderText("ex: AMPHI 750, Salle B201")
+        form.addRow("Salle :", self._room)
+
+        self._teacher_combo = QComboBox()
+        self._teacher_combo.setStyleSheet(st)
+        current_tid = self.slot_data.get('teacher_id')
+        for t in self.teachers:
+            self._teacher_combo.addItem(t.full_name, t.id)
+            if t.id == current_tid:
+                self._teacher_combo.setCurrentIndex(self._teacher_combo.count() - 1)
+        form.addRow("Enseignant :", self._teacher_combo)
+
+        layout.addLayout(form)
+
+        btn_row = QHBoxLayout()
+        btn_row.addStretch()
+        btn_cancel = QPushButton("Annuler")
+        btn_cancel.setFixedHeight(38)
+        btn_cancel.setStyleSheet(
+            "border:1px solid #ddd; border-radius:6px; padding:0 16px; color:#555;"
+        )
+        btn_cancel.clicked.connect(self.reject)
+        btn_row.addWidget(btn_cancel)
+
+        btn_save = QPushButton("💾  Enregistrer")
+        btn_save.setFixedHeight(38)
+        btn_save.setStyleSheet(
+            "background:#1a73e8; color:white; border-radius:6px; font-weight:bold; padding:0 18px;"
+        )
+        btn_save.clicked.connect(self._validate_and_accept)
+        btn_row.addWidget(btn_save)
+        layout.addLayout(btn_row)
+
+    def _validate_and_accept(self):
+        if self._start.time() >= self._end.time():
+            QMessageBox.warning(self, "Erreur",
+                "L'heure de fin doit être après l'heure de début.")
+            return
+        if not self._room.text().strip():
+            QMessageBox.warning(self, "Erreur", "La salle ne peut pas être vide.")
+            return
+        self.accept()
+
+    def get_values(self):
+        qd   = self._date.date()
+        qt_s = self._start.time()
+        qt_e = self._end.time()
+        return {
+            'date':       date(qd.year(), qd.month(), qd.day()),
+            'start':      f"{qt_s.hour():02d}:{qt_s.minute():02d}",
+            'end':        f"{qt_e.hour():02d}:{qt_e.minute():02d}",
+            'room':       self._room.text().strip(),
+            'teacher_id': self._teacher_combo.currentData(),
+            'teacher':    self._teacher_combo.currentText(),
+        }
 
 
 class TimetableGrid(QWidget):
@@ -149,7 +295,7 @@ class TimetableGrid(QWidget):
         self.grid_widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         main.addWidget(self.grid_widget)
 
-    def load_slots(self, slots):
+    def load_slots(self, slots, edit_mode=False, on_edit=None, on_delete=None):
         for i in reversed(range(self.grid_layout.count())):
             item = self.grid_layout.itemAt(i)
             if item and isinstance(item.widget(), CourseBlock):
@@ -172,8 +318,13 @@ class TimetableGrid(QWidget):
                     continue
                 row_start = start_h - HEURE_DEBUT + 1
                 row_span  = max(1, end_h - start_h)
-                block = CourseBlock(slot)
+                block = CourseBlock(slot, edit_mode=edit_mode)
                 block.setFixedHeight(SLOT_H * row_span - 4)
+                if edit_mode:
+                    if on_edit:
+                        block.edit_requested.connect(on_edit)
+                    if on_delete:
+                        block.delete_requested.connect(on_delete)
                 self.grid_layout.addWidget(block, row_start, weekday, row_span, 1)
             except Exception:
                 pass
@@ -185,10 +336,12 @@ class TimetableTab(QWidget):
     def __init__(self, current_user=None, parent=None):
         super().__init__(parent)
         self.current_user = current_user
-        self._all_slots = []
-        self._teachers  = []
-        self._cohorts   = []
-        # Semaine affichée (lundi de la semaine courante)
+        self._all_slots   = []
+        self._teachers    = []
+        self._cohorts     = []
+        self._edit_mode   = False
+        self._type_filter = None   # ✅ Filtre par type (CM/TD/TP/Examen)
+        self._type_btns   = {}     # ✅ Référence aux boutons de filtre
         today = date.today()
         self._week_start = today - timedelta(days=today.weekday())
         self._init_ui()
@@ -229,13 +382,17 @@ class TimetableTab(QWidget):
                 end_str   = (s.end_time.strftime('%H:%M')
                              if isinstance(s.end_time, dtime)
                              else str(s.end_time)[:5])
+
+                # ✅ Normaliser le type pour correspondre aux clés de TYPE_COLORS
+                normalized_type = self._normalize_type(act_type)
+
                 self._all_slots.append({
                     'date':          s.date,
                     'start':         start_str,
                     'end':           end_str,
                     'activity':      s.activity.name  if s.activity  else "?",
                     'activity_code': s.activity.code  if s.activity  else "",
-                    'activity_type': act_type,
+                    'activity_type': normalized_type,
                     'teacher':       s.teacher.full_name if s.teacher else "Non assigné",
                     'cohort':        s.cohort.name    if s.cohort    else "?",
                     'room':          s.room or "—",
@@ -244,14 +401,56 @@ class TimetableTab(QWidget):
                     'cohort_id':     s.cohort_id,
                     'teacher_id':    s.teacher_id,
                     'activity_id':   s.activity_id,
+                    'slot_id':       s.id,
                 })
         except Exception as e:
             print(f"[timetable_tab] Erreur lecture schedule_slots: {e}")
 
-    def _populate_target_combo(self):
-        # ✅ Mémoriser la sélection avant de reconstruire la liste
-        prev_data = self.target_combo.currentData()
+    def _normalize_type(self, raw_type: str) -> str:
+        """
+        Normalise le type d'activité pour correspondre aux clés de TYPE_COLORS.
+        Ex: "Travaux Dirigés" → "TD", "Cours Magistral" → "CM", etc.
+        """
+        if not raw_type:
+            return ""
+        t = raw_type.strip().upper()
+        # Correspondances directes
+        if t in ("CM", "TD", "TP", "EXAMEN", "SOUTENANCE"):
+            return t.capitalize() if t == "EXAMEN" else t
+        # Correspondances par mots-clés
+        if "MAGISTRAL" in t or "COURS" in t:
+            return "CM"
+        if "DIRIGÉ" in t or "DIRIGE" in t or "TD" in t:
+            return "TD"
+        if "PRATIQUE" in t or "TP" in t:
+            return "TP"
+        if "EXAMEN" in t:
+            return "Examen"
+        if "SOUTENANCE" in t:
+            return "Soutenance"
+        # Retourner tel quel si non reconnu
+        return raw_type
 
+    def _on_type_filter(self, type_label: str, checked: bool):
+        """
+        Active/désactive le filtre par type d'activité.
+        Un seul type peut être actif à la fois.
+        Si on reclique sur le bouton déjà actif → réinitialise le filtre.
+        """
+        if checked:
+            self._type_filter = type_label
+            # Désactiver les autres boutons sans déclencher leur signal
+            for lbl, btn in self._type_btns.items():
+                if lbl != type_label:
+                    btn.blockSignals(True)
+                    btn.setChecked(False)
+                    btn.blockSignals(False)
+        else:
+            self._type_filter = None
+        self._refresh_grid()
+
+    def _populate_target_combo(self):
+        prev_data = self.target_combo.currentData()
         self.target_combo.blockSignals(True)
         self.target_combo.clear()
         view = self.view_combo.currentText()
@@ -275,7 +474,6 @@ class TimetableTab(QWidget):
             else:
                 self.target_combo.addItem("⚠️ Aucun enseignant", userData=None)
 
-        # ✅ Restaurer la sélection par ID (pas par index)
         if prev_data:
             kind, entity_id, _ = prev_data
             for i in range(self.target_combo.count()):
@@ -288,11 +486,9 @@ class TimetableTab(QWidget):
         self._refresh_grid()
 
     def _reload_all(self):
-        # ✅ Mémoriser vue et sélection AVANT rechargement
         prev_data = self.target_combo.currentData()
         prev_view = self.view_combo.currentText()
 
-        # Recharger depuis SQLite
         try:
             session = db_manager.get_session()
             self._teachers = TeacherRepository(session).get_all()
@@ -301,12 +497,10 @@ class TimetableTab(QWidget):
         except Exception as e:
             print(f"[timetable_tab] Erreur reload: {e}")
 
-        # Restaurer la vue
         self.view_combo.blockSignals(True)
         self.view_combo.setCurrentText(prev_view)
         self.view_combo.blockSignals(False)
 
-        # Reconstruire le combo
         self.target_combo.blockSignals(True)
         self.target_combo.clear()
 
@@ -323,7 +517,6 @@ class TimetableTab(QWidget):
                     userData=('teacher', t.id, t.full_name)
                 )
 
-        # ✅ Restaurer l'enseignant/cohorte sélectionné par son ID
         if prev_data:
             kind, entity_id, _ = prev_data
             for i in range(self.target_combo.count()):
@@ -376,7 +569,7 @@ class TimetableTab(QWidget):
                         or s.get('teacher_id') == entity_id]
 
         # ─── Filtrer par semaine affichée ────────────────────────
-        week_end = self._week_start + timedelta(days=6)
+        week_end   = self._week_start + timedelta(days=6)
         week_slots = []
         for s in filtered:
             d = s.get('date')
@@ -385,13 +578,26 @@ class TimetableTab(QWidget):
             if d is not None and self._week_start <= d <= week_end:
                 week_slots.append(s)
 
-        self.grid.load_slots(week_slots)
+        # ─── ✅ Filtrer par type (CM / TD / TP / Examen) ─────────
+        if self._type_filter:
+            week_slots = [
+                s for s in week_slots
+                if s.get('activity_type', '') == self._type_filter
+            ]
 
-        # Afficher un message si aucun créneau cette semaine
+        self.grid.load_slots(
+            week_slots,
+            edit_mode=self._edit_mode,
+            on_edit=self._on_edit_slot,
+            on_delete=self._on_delete_slot
+        )
+
+        # Mettre à jour le label d'info
         total_slots = len(filtered)
+        type_info   = f" [{self._type_filter}]" if self._type_filter else ""
         if total_slots > 0 and len(week_slots) == 0:
             self.empty_label.setText(
-                f"⚠️ Aucun cours cette semaine.\n"
+                f"⚠️ Aucun cours{type_info} cette semaine.\n"
                 f"({total_slots} créneau(x) au total — naviguez avec ◀ ▶)"
             )
             self.empty_label.setVisible(True)
@@ -417,7 +623,8 @@ class TimetableTab(QWidget):
         subtitle.setStyleSheet("color: #555; font-size: 12px; font-style: italic;")
         layout.addWidget(subtitle)
 
-        ctrl = QHBoxLayout(); ctrl.setSpacing(10)
+        ctrl = QHBoxLayout()
+        ctrl.setSpacing(10)
         ctrl.addWidget(QLabel("Vue :"))
         self.view_combo = QComboBox()
         self.view_combo.setFixedHeight(36)
@@ -441,8 +648,26 @@ class TimetableTab(QWidget):
         btn_reload.clicked.connect(self._reload_all)
         ctrl.addWidget(btn_reload)
 
-        # ─── Navigation semaine ───────────────────────────────
+        self.btn_edit_mode = QPushButton("✏️  Mode édition")
+        self.btn_edit_mode.setFixedHeight(36)
+        self.btn_edit_mode.setCheckable(True)
+        self.btn_edit_mode.setStyleSheet("""
+            QPushButton {
+                background: #F9FAFB; color: #374151;
+                border: 1px solid #D1D5DB; border-radius: 6px;
+                font-weight: bold; padding: 0 14px;
+            }
+            QPushButton:checked {
+                background: #FEF3C7; color: #92400E;
+                border: 1px solid #F59E0B;
+            }
+            QPushButton:hover { background: #F3F4F6; }
+        """)
+        self.btn_edit_mode.toggled.connect(self._toggle_edit_mode)
+        ctrl.addWidget(self.btn_edit_mode)
+
         ctrl.addStretch()
+
         btn_prev = QPushButton("◀ Semaine préc.")
         btn_prev.setFixedHeight(36)
         btn_prev.setStyleSheet("background: #f5f5f5; border-radius:6px; padding:0 10px;")
@@ -461,16 +686,39 @@ class TimetableTab(QWidget):
         btn_next.clicked.connect(self._next_week)
         ctrl.addWidget(btn_next)
 
+        # ✅ Boutons de filtre CM / TD / TP / Examen — cliquables
         for label, (bg, fg) in list(TYPE_COLORS.items())[:4]:
-            lbl = QLabel(f" {label} ")
-            lbl.setStyleSheet(
-                f"background: {bg}; color: {fg}; border-radius: 3px; "
-                f"font-size: 10px; padding: 2px 5px;"
+            btn = QPushButton(label)
+            btn.setFixedHeight(30)
+            btn.setCheckable(True)
+            btn.setStyleSheet(f"""
+                QPushButton {{
+                    background: {bg};
+                    color: {fg};
+                    border: 2px solid transparent;
+                    border-radius: 4px;
+                    font-size: 11px;
+                    font-weight: bold;
+                    padding: 2px 10px;
+                }}
+                QPushButton:checked {{
+                    border: 2px solid {fg};
+                    font-weight: bold;
+                }}
+                QPushButton:hover {{
+                    border: 1px solid {fg};
+                }}
+            """)
+            btn.toggled.connect(
+                lambda checked, t=label: self._on_type_filter(t, checked)
             )
-            ctrl.addWidget(lbl)
+            ctrl.addWidget(btn)
+            self._type_btns[label] = btn
+
         layout.addLayout(ctrl)
 
-        urg = QHBoxLayout(); urg.setSpacing(5)
+        urg = QHBoxLayout()
+        urg.setSpacing(5)
         urg.addWidget(QLabel("Bordure :"))
         for color, label in [
             ("#C62828", "🔴 Critique α≥1"),
@@ -502,7 +750,8 @@ class TimetableTab(QWidget):
         self.empty_label.setVisible(False)
         layout.addWidget(self.empty_label)
 
-        export_layout = QHBoxLayout(); export_layout.setSpacing(8)
+        export_layout = QHBoxLayout()
+        export_layout.setSpacing(8)
         for icon, text, handler, bg in [
             ("🖨️",  "Export PDF",   self._export_pdf,   "#c62828"),
             ("📊",  "Export Excel", self._export_excel, "#2e7d32"),
@@ -589,7 +838,9 @@ class TimetableTab(QWidget):
         try:
             import openpyxl
             from openpyxl.styles import PatternFill, Font
-            wb = openpyxl.Workbook(); ws = wb.active; ws.title = "Emploi du temps"
+            wb = openpyxl.Workbook()
+            ws = wb.active
+            ws.title = "Emploi du temps"
             ws.append(["Date", "Début", "Fin", "Activité", "Type", "Salle", "Enseignant", "α"])
             for col in range(1, 9):
                 ws.cell(1, col).font = Font(bold=True, color="FFFFFF")
@@ -657,6 +908,120 @@ class TimetableTab(QWidget):
             QMessageBox.information(self, "Export réussi", f"CSV sauvegardé :\n{path}")
         except Exception as e:
             QMessageBox.critical(self, "Erreur export CSV", str(e))
+
+    # ══════════════════════════════════════════════════════════
+    # MODE ÉDITION
+    # ══════════════════════════════════════════════════════════
+
+    def _toggle_edit_mode(self, checked):
+        self._edit_mode = checked
+        if checked:
+            self.btn_edit_mode.setText("🔒  Quitter édition")
+            QMessageBox.information(
+                self, "Mode édition activé",
+                "Mode édition activé.\n\n"
+                "Faites un clic droit sur un créneau\n"
+                "pour le modifier ou le supprimer."
+            )
+        else:
+            self.btn_edit_mode.setText("✏️  Mode édition")
+        self._refresh_grid()
+
+    def _on_edit_slot(self, slot_data):
+        dialog = SlotEditDialog(slot_data, self._teachers, parent=self)
+        if dialog.exec_() != QDialog.Accepted:
+            return
+        values  = dialog.get_values()
+        slot_id = slot_data.get('slot_id')
+        if not slot_id:
+            QMessageBox.warning(self, "Erreur",
+                "Impossible d'identifier ce créneau en base.")
+            return
+        try:
+            from datetime import time as dtime_cls
+            from src.database.models import ScheduleSlotModel as SSM
+            from sqlalchemy import and_
+            session  = db_manager.get_session()
+            slot_orm = session.query(SSM).filter_by(id=slot_id).first()
+            if not slot_orm:
+                QMessageBox.warning(self, "Erreur", "Créneau introuvable en base.")
+                return
+            sh, sm    = map(int, values['start'].split(':'))
+            eh, em    = map(int, values['end'].split(':'))
+            new_start = dtime_cls(sh, sm)
+            new_end   = dtime_cls(eh, em)
+            conflict  = session.query(SSM).filter(
+                and_(
+                    SSM.id         != slot_id,
+                    SSM.date       == values['date'],
+                    SSM.teacher_id == values['teacher_id'],
+                    SSM.start_time  < new_end,
+                    SSM.end_time    > new_start,
+                )
+            ).first()
+            if conflict:
+                c_name = conflict.activity.name if conflict.activity else '?'
+                QMessageBox.warning(
+                    self, "Conflit détecté",
+                    f"L'enseignant a déjà un cours à cet horaire :\n"
+                    f"{c_name} ({conflict.start_time} - {conflict.end_time})\n\n"
+                    "Modification annulée."
+                )
+                return
+            slot_orm.date       = values['date']
+            slot_orm.start_time = new_start
+            slot_orm.end_time   = new_end
+            slot_orm.room       = values['room']
+            slot_orm.teacher_id = values['teacher_id']
+            session.commit()
+            QMessageBox.information(
+                self, "Créneau modifié",
+                f"Créneau modifié avec succès.\n"
+                f"Date : {values['date'].strftime('%d/%m/%Y')}\n"
+                f"Horaire : {values['start']} – {values['end']}\n"
+                f"Salle : {values['room']}\n"
+                f"Enseignant : {values['teacher']}"
+            )
+            self._reload_all()
+        except Exception as exc:
+            QMessageBox.critical(self, "Erreur",
+                f"Impossible de modifier le créneau :\n{exc}")
+
+    def _on_delete_slot(self, slot_data):
+        slot_id  = slot_data.get('slot_id')
+        act_name = slot_data.get('activity', '?')
+        d        = slot_data.get('date')
+        if isinstance(d, str):
+            d = datetime.fromisoformat(d).date()
+        date_str = d.strftime('%d/%m/%Y') if d else '?'
+        reply = QMessageBox.question(
+            self, "Confirmer la suppression",
+            f"Supprimer ce créneau ?\n\n"
+            f"• {act_name}\n"
+            f"• {date_str}  {slot_data.get('start','')} – {slot_data.get('end','')}\n"
+            f"• Salle : {slot_data.get('room','')}\n\n"
+            "Cette action est irréversible.",
+            QMessageBox.Yes | QMessageBox.Cancel,
+            QMessageBox.Cancel
+        )
+        if reply != QMessageBox.Yes:
+            return
+        try:
+            session  = db_manager.get_session()
+            slot_orm = session.query(ScheduleSlotModel).filter_by(id=slot_id).first()
+            if slot_orm:
+                session.delete(slot_orm)
+                session.commit()
+                QMessageBox.information(
+                    self, "Créneau supprimé",
+                    f"Le créneau '{act_name}' du {date_str} a été supprimé."
+                )
+                self._reload_all()
+            else:
+                QMessageBox.warning(self, "Erreur", "Créneau introuvable en base.")
+        except Exception as exc:
+            QMessageBox.critical(self, "Erreur",
+                f"Impossible de supprimer :\n{exc}")
 
     def refresh_data(self):
         self._reload_all()

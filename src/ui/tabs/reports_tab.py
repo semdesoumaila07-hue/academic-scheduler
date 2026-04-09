@@ -271,36 +271,75 @@ class ReportsTab(QWidget):
         self._setup_auto()
 
     def _setup_auto(self):
+        """
+        Configure le déclencheur d'export automatique.
+
+        Le timer vérifie toutes les 30 secondes si on est vendredi entre 18h00 et 18h01.
+        La fenêtre de 1 minute garantit que le déclencheur n'est pas raté même si
+        le timer s'exécute légèrement en retard. Un verrou (_auto_done_today) empêche
+        l'export de se déclencher plusieurs fois dans la même fenêtre.
+        """
+        self._auto_done_today = None   # mémorise la date du dernier export automatique
         self._atimer = QTimer(self)
-        self._atimer.setInterval(60000)
+        self._atimer.setInterval(30000)   # toutes les 30 secondes
         self._atimer.timeout.connect(self._check_auto)
         self._atimer.start()
 
     def _check_auto(self):
+        """
+        Vérifie si l'export automatique doit être déclenché.
+
+        Conditions : vendredi (weekday==4) + heure 18h00–18h00 + pas encore exporté aujourd'hui.
+        La fenêtre de 60 secondes (minute==0) couvre le délai du timer de 30 s.
+        """
         now = datetime.now()
-        if now.weekday()==4 and now.hour==18 and now.minute==0:
-            self._auto_export()
+        today = now.date()
+        is_friday_18h = (now.weekday() == 4 and now.hour == 18 and now.minute == 0)
+
+        # Evite un double déclenchement dans la même fenêtre d'une minute
+        if is_friday_18h and self._auto_done_today != today:
+            self._auto_done_today = today
+            self._auto_export(silent=True)
 
     def _auto_export(self, silent=False):
+        """
+        Exporte le rapport au format PDF + Excel dans le dossier Rapports_Academiques.
+
+        Args:
+            silent: Si True, n'affiche pas de boîte de dialogue de confirmation.
+                    Utilisé pour l'export automatique vendredi 18h.
+        """
         try:
+            # Crée le dossier de destination (Documents, sinon Bureau)
             folder = os.path.join(os.path.expanduser("~"), "Documents", "Rapports_Academiques")
             try:
-                if not os.path.exists(folder):
-                    os.mkdir(folder)
+                os.makedirs(folder, exist_ok=True)
             except Exception:
                 folder = os.path.join(os.path.expanduser("~"), "Desktop", "Rapports_Academiques")
-                if not os.path.exists(folder):
-                    os.mkdir(folder)
+                os.makedirs(folder, exist_ok=True)
+
             stamp = datetime.now().strftime("%Y%m%d_%H%M")
-            sd = self.dt_start.date(); ed = self.dt_end.date()
+            sd = self.dt_start.date()
+            ed = self.dt_end.date()
             ps = f"{sd.day():02d}/{sd.month():02d}/{sd.year()}"
             pe = f"{ed.day():02d}/{ed.month():02d}/{ed.year()}"
-            do_export_pdf(os.path.join(folder,f"rapport_{stamp}.pdf"), self.session, ps, pe, "Export auto vendredi")
-            do_export_excel(os.path.join(folder,f"rapport_{stamp}.xlsx"), self.session, ps, pe)
+
+            pdf_path  = os.path.join(folder, f"rapport_{stamp}.pdf")
+            xlsx_path = os.path.join(folder, f"rapport_{stamp}.xlsx")
+
+            do_export_pdf(pdf_path,  self.session, ps, pe, "Export auto vendredi")
+            do_export_excel(xlsx_path, self.session, ps, pe)
+
             if not silent:
-                QMessageBox.information(self,"Export auto",f"Rapport vendredi genere:\n{folder}")
+                QMessageBox.information(
+                    self, "Export automatique",
+                    f"Rapport vendredi 18h généré avec succès :\n{folder}"
+                )
         except Exception as e:
-            if not silent: QMessageBox.warning(self,"Erreur auto",str(e))
+            if not silent:
+                QMessageBox.warning(self, "Erreur export auto", str(e))
+            else:
+                print(f"[reports_tab] export auto error: {e}")
 
     def _build(self):
         lay = QVBoxLayout(self); lay.setContentsMargins(24,24,24,24); lay.setSpacing(16)

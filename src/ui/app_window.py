@@ -25,8 +25,8 @@ from src.database.db_manager import db_manager
 # 10=Disponibilites
 
 ROLE_ALLOWED = {
-    'admin':      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],   # tout
-    'responsable': [0, 3, 4, 5, 6, 7, 9],                 # UC3 UC5 UC7 UC10
+    'admin':      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],   # tout + sporadiques
+    'responsable': [0, 3, 4, 5, 6, 7, 9, 13],             # UC3 UC5 UC7 UC10 + sporadiques
     'teacher':     [0, 5, 7, 9, 10],
     'teacher_user':[0, 5, 7, 9, 10],
     'Enseignant':          [0, 5, 7, 9, 10],

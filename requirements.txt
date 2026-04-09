@@ -1,14 +1,35 @@
-# Système d'Ordonnancement Académique P-équitable
-# Conception : CustomTkinter, JSON/CSV (cf. document conception.pdf)
-
-customtkinter>=5.2.0
-matplotlib>=3.5.0
-pandas>=1.5.0
-
-# Héritage (mode SQLite+PyQt5) - optionnel
-PyQt5>=5.15.0
-SQLAlchemy>=2.0.0
-
-# Exports Emplois du temps (UC6)
-reportlab>=4.0.0   # Génération PDF
-openpyxl>=3.1.0    # Export Excel (.xlsx)
+bcrypt==5.0.0
+charset-normalizer==3.4.4
+colorama==0.4.6
+contourpy==1.3.3
+coverage==7.13.4
+customtkinter==5.2.2
+cycler==0.12.1
+darkdetect==0.8.0
+et_xmlfile==2.0.0
+fonttools==4.61.1
+greenlet==3.3.1
+iniconfig==2.3.0
+kiwisolver==1.4.9
+matplotlib==3.10.8
+numpy==2.4.2
+openpyxl==3.1.5
+packaging==26.0
+pandas==3.0.0
+pillow==12.1.1
+pluggy==1.6.0
+Pygments==2.19.2
+pyparsing==3.3.2
+PyQt5==5.15.11
+PyQt5-Qt5==5.15.2
+PyQt5_sip==12.18.0
+PyQtChart==5.15.7
+PyQtChart-Qt5==5.15.2
+pytest==9.0.2
+pytest-cov==7.0.0
+python-dateutil==2.9.0.post0
+reportlab==4.4.9
+six==1.17.0
+SQLAlchemy==2.0.46
+typing_extensions==4.15.0
+tzdata==2025.3

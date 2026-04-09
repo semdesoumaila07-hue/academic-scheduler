@@ -14,9 +14,17 @@ class UFRRepository(BaseRepository[UFRModel]):
     def __init__(self, session: Session):
         super().__init__(UFRModel, session)
 
-    def get_by_code(self, code: str) -> Optional[UFRModel]:
-        """Récupère une UFR par son code."""
-        return self.first_by(code=code)
+    def get_by_code(self, code: str, university_id: int = None) -> Optional[UFRModel]:
+        """
+        Récupère une UFR par son code.
+
+        Si university_id est fourni, la recherche est limitée à cette université
+        (un même code peut exister dans deux universités différentes).
+        """
+        query = self.session.query(self.model).filter(self.model.code == code)
+        if university_id is not None:
+            query = query.filter(self.model.university_id == university_id)
+        return query.first()
 
     def get_by_university(self, university_id: int) -> List[UFRModel]:
         """Récupère toutes les UFR d'une université."""
@@ -44,9 +52,8 @@ class UFRRepository(BaseRepository[UFRModel]):
     def delete(self, id: int) -> bool:
         """
         Supprime une UFR.
-        ⚠️  Lève ValueError si des programmes sont encore rattachés à cette UFR.
+        Lève ValueError si des programmes sont encore rattachés à cette UFR.
         """
-        # Vérifier s'il existe des programmes liés
         programmes_count = (
             self.session.query(ProgramModel)
             .filter(ProgramModel.ufr_id == id)
@@ -58,5 +65,4 @@ class UFRRepository(BaseRepository[UFRModel]):
                 f"{programmes_count} programme(s) y sont rattaché(s). "
                 f"Supprimez d'abord les programmes."
             )
-
         return super().delete(id)

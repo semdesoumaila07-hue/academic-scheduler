@@ -26,19 +26,30 @@ CREATE INDEX idx_universities_city ON universities(city);
 -- ================================================================
 -- TABLE: ufrs
 -- ================================================================
-CREATE TABLE IF NOT EXISTS ufrs (
+-- Recréer la table ufrs avec une contrainte UNIQUE composite (code + university_id)
+-- À exécuter si vous pouvez vous permettre de recréer la table
+
+-- Option 1 : Supprimer l'ancienne contrainte (SQLite ne supporte pas DROP CONSTRAINT)
+-- Il faut recréer la table :
+
+CREATE TABLE IF NOT EXISTS ufrs_new (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(200) NOT NULL,
-    code VARCHAR(10) UNIQUE NOT NULL,
+    code VARCHAR(10) NOT NULL,
     director VARCHAR(200),
     university_id INTEGER NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (university_id) REFERENCES universities(id) ON DELETE CASCADE
+    FOREIGN KEY (university_id) REFERENCES universities(id) ON DELETE CASCADE,
+    UNIQUE (code, university_id)   -- ✅ Unicité par université
 );
 
-CREATE INDEX idx_ufrs_code ON ufrs(code);
-CREATE INDEX idx_ufrs_university ON ufrs(university_id);
+INSERT INTO ufrs_new SELECT * FROM ufrs;
+DROP TABLE ufrs;
+ALTER TABLE ufrs_new RENAME TO ufrs;
+
+CREATE INDEX IF NOT EXISTS idx_ufrs_code ON ufrs(code);
+CREATE INDEX IF NOT EXISTS idx_ufrs_university ON ufrs(university_id);
 
 -- ================================================================
 -- TABLE: programs

@@ -23,6 +23,7 @@ TAB_ITEMS: List[Tuple[int, str, str, str]] = [
     (10, 'declare_availability', '🕒', 'Disponibilités'),
     (12, 'manage_rooms', '🏢', 'Salles'),
     (11, 'manage_users', '👥', 'Utilisateurs'),
+    (13, 'launch_scheduling', '⚡', 'Sporadiques'),
 ]
 
 

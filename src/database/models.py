@@ -223,6 +223,12 @@ class AcademicActivityModel(Base):
     status = Column(Enum(ActivityStatusEnum), default=ActivityStatusEnum.PENDING)
     cohort_id = Column(Integer, ForeignKey('cohorts.id', ondelete='CASCADE'), nullable=False)
     teacher_id = Column(Integer, ForeignKey('teachers.id', ondelete='SET NULL'))
+    # ── Tâches sporadiques ────────────────────────────────────────────────
+    is_sporadic = Column(Boolean, default=False)
+    # arrival_date : date à laquelle la tâche devient connue (ri dans la théorie)
+    arrival_date = Column(Date, nullable=True)
+    # execution_window : nombre de jours disponibles pour planifier la tâche (di)
+    execution_window = Column(Integer, nullable=True)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
 

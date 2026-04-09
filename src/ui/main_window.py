@@ -12,12 +12,13 @@ from .tabs import (
     CalendarTab, SchedulingTab, AnalysisTab, LeavesTab,
     ReportsTab, TimetableTab, AvailabilityTab, UsersTab, RoomsTab,
 )
+from .tabs.sporadic_tab import SporadicTab
 from ..services.permissions_config import TAB_ITEMS, get_allowed_tab_indices
 
 TAB_CLASSES = [
     DashboardTab, StructureTab, TeachersTab, ActivitiesTab, CalendarTab,
     LeavesTab, SchedulingTab, AnalysisTab, ReportsTab, TimetableTab,
-    AvailabilityTab, UsersTab, RoomsTab,
+    AvailabilityTab, UsersTab, RoomsTab, SporadicTab,
 ]
 
 

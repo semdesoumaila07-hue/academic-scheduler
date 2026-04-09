@@ -1,5 +1,10 @@
 """
 Onglet Calendrier Académique — UC5 — 100% SQLite
+
+CORRECTION : calcul_d_effectif() ne gérait pas les jours fériés récurrents.
+Un férié marqué is_recurring=True doit être exclu chaque année au même jour/mois,
+pas seulement à sa date exacte. Sans ce fix, le dashboard affichait un D_effectif
+supérieur à celui calculé par le Pfair Scheduler (ex: 225 vs 236).
 """
 from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QTableWidget,
@@ -25,9 +30,9 @@ class CalendarTab(QWidget):
         super().__init__(parent)
         self.current_user = current_user
         self.session = db_manager.get_session()
-        self.calendars  = []
-        self.holidays   = []
-        self.vacations  = []
+        self.calendars   = []
+        self.holidays    = []
+        self.vacations   = []
         self.universites = []
         self.load_data()
         self.init_ui()
@@ -188,21 +193,59 @@ class CalendarTab(QWidget):
     # ══════════════════════════════════════════════════════════
 
     def calcul_d_effectif(self, calendar: AcademicCalendarModel):
-        """Calcule le nombre de jours ouvrables effectifs."""
+        """
+        Calcule le nombre de jours ouvrables effectifs.
+
+        CORRECTION : l'ancienne version ne vérifiait que la date exacte des
+        fériés, ignorant les fériés récurrents (is_recurring=True).
+        Un férié récurrent s'applique chaque année au même jour/mois.
+        Ex : Indépendance le 11/12/2026 (récurrent) → aussi exclu le 11/12/2025
+        si cette date est dans la période du calendrier.
+
+        Cette logique est désormais identique à celle de HolidayRepository.is_holiday()
+        utilisée par le Pfair Scheduler, garantissant la cohérence des deux valeurs
+        affichées dans l'application.
+        """
         from datetime import timedelta
         if not calendar.start_date or not calendar.end_date:
             return 0
+
+        vacation_ranges = [
+            (v.start_date, v.end_date)
+            for v in calendar.vacation_periods
+        ]
+
         jours = 0
-        holidays_dates = {h.date for h in calendar.holidays}
-        vacation_ranges = [(v.start_date, v.end_date) for v in calendar.vacation_periods]
         current = calendar.start_date
+
         while current <= calendar.end_date:
-            if current.weekday() < 5:  # Lundi-Vendredi
-                if current not in holidays_dates:
+            if current.weekday() < 5:  # Lundi-Vendredi uniquement
+
+                # ── Vérification fériés : exacts ET récurrents ───────────────
+                est_ferie = False
+                for h in calendar.holidays:
+                    # 1. Date exacte (récurrent ou non)
+                    if h.date == current:
+                        est_ferie = True
+                        break
+                    # 2. Férié récurrent : même jour/mois, année différente
+                    #    ✅ CORRECTION : cette branche était absente avant
+                    if (
+                        h.is_recurring
+                        and h.date.day   == current.day
+                        and h.date.month == current.month
+                    ):
+                        est_ferie = True
+                        break
+                # ─────────────────────────────────────────────────────────────
+
+                if not est_ferie:
                     en_vacances = any(s <= current <= e for s, e in vacation_ranges)
                     if not en_vacances:
                         jours += 1
+
             current += timedelta(days=1)
+
         return jours
 
     # ══════════════════════════════════════════════════════════
@@ -214,7 +257,6 @@ class CalendarTab(QWidget):
         layout.setContentsMargins(30, 30, 30, 30)
         layout.setSpacing(20)
 
-        # En-tête
         title = QLabel("Calendrier Académique")
         title.setStyleSheet("font-size:28px; font-weight:bold; color:#1a1a1a;")
         layout.addWidget(title)
@@ -223,18 +265,16 @@ class CalendarTab(QWidget):
         subtitle.setStyleSheet("font-size:14px; color:#666;")
         layout.addWidget(subtitle)
 
-        # Stats
         stats_layout = QHBoxLayout()
-        self.stat_cal  = self._stat_card("Calendriers", "0", "#3B82F6")
-        self.stat_hol  = self._stat_card("Jours fériés", "0", "#F59E0B")
-        self.stat_vac  = self._stat_card("Périodes vacances", "0", "#8B5CF6")
+        self.stat_cal  = self._stat_card("Calendriers",       "0", "#3B82F6")
+        self.stat_hol  = self._stat_card("Jours fériés",      "0", "#F59E0B")
+        self.stat_vac  = self._stat_card("Périodes vacances",  "0", "#8B5CF6")
         self.stat_deff = self._stat_card("D_effectif (jours)", "—", "#10B981")
         for c in [self.stat_cal, self.stat_hol, self.stat_vac, self.stat_deff]:
             stats_layout.addWidget(c)
         layout.addLayout(stats_layout)
         self.update_stats()
 
-        # Onglets
         tabs = QTabWidget()
         tabs.setStyleSheet("""
             QTabWidget::pane { border:1px solid #E5E7EB; border-radius:8px; background:white; }
@@ -300,7 +340,8 @@ class CalendarTab(QWidget):
         t.verticalHeader().setVisible(False)
         t.setStyleSheet("""
             QTableWidget { border:1px solid #E5E7EB; border-radius:8px; }
-            QHeaderView::section { background:#F9FAFB; font-weight:bold; padding:8px; border:none; border-bottom:1px solid #E5E7EB; }
+            QHeaderView::section { background:#F9FAFB; font-weight:bold; padding:8px;
+                                   border:none; border-bottom:1px solid #E5E7EB; }
         """)
         return t
 
@@ -308,13 +349,15 @@ class CalendarTab(QWidget):
         f = QFrame()
         f.setStyleSheet(f"QFrame {{ background:{color}; border-radius:10px; padding:12px; }}")
         v = QVBoxLayout(f)
-        lbl_v = QLabel(value); lbl_v.setObjectName("val")
+        lbl_v = QLabel(value)
+        lbl_v.setObjectName("val")
         lbl_v.setStyleSheet("font-size:28px; font-weight:bold; color:white;")
         lbl_v.setAlignment(Qt.AlignCenter)
         lbl_l = QLabel(label)
         lbl_l.setStyleSheet("font-size:12px; color:white;")
         lbl_l.setAlignment(Qt.AlignCenter)
-        v.addWidget(lbl_v); v.addWidget(lbl_l)
+        v.addWidget(lbl_v)
+        v.addWidget(lbl_l)
         return f
 
     def _set_stat(self, card, val):
@@ -411,17 +454,31 @@ class CalendarDialog(QDialog):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(24, 24, 24, 24)
         layout.setSpacing(14)
-        QLabel("📅 Calendrier Académique").setParent(self)
         title = QLabel("📅 Nouveau Calendrier Académique")
         title.setStyleSheet("font-size:18px; font-weight:bold;")
         layout.addWidget(title)
-        form = QFormLayout(); form.setSpacing(10)
-        self.name_input = QLineEdit(); self.name_input.setPlaceholderText("Ex: Calendrier 2025-2026"); self.name_input.setFixedHeight(36)
-        self.year_input = QLineEdit(); self.year_input.setPlaceholderText("Ex: 2025-2026"); self.year_input.setFixedHeight(36)
-        self.start_date = QDateEdit(QDate.currentDate()); self.start_date.setCalendarPopup(True); self.start_date.setFixedHeight(36)
-        self.end_date   = QDateEdit(QDate.currentDate().addMonths(6)); self.end_date.setCalendarPopup(True); self.end_date.setFixedHeight(36)
-        self.hours_spin = QSpinBox(); self.hours_spin.setRange(1,12); self.hours_spin.setValue(8); self.hours_spin.setFixedHeight(36)
-        self.sem_spin   = QSpinBox(); self.sem_spin.setRange(1,4); self.sem_spin.setValue(2); self.sem_spin.setFixedHeight(36)
+        form = QFormLayout()
+        form.setSpacing(10)
+        self.name_input = QLineEdit()
+        self.name_input.setPlaceholderText("Ex: Calendrier 2025-2026")
+        self.name_input.setFixedHeight(36)
+        self.year_input = QLineEdit()
+        self.year_input.setPlaceholderText("Ex: 2025-2026")
+        self.year_input.setFixedHeight(36)
+        self.start_date = QDateEdit(QDate.currentDate())
+        self.start_date.setCalendarPopup(True)
+        self.start_date.setFixedHeight(36)
+        self.end_date = QDateEdit(QDate.currentDate().addMonths(6))
+        self.end_date.setCalendarPopup(True)
+        self.end_date.setFixedHeight(36)
+        self.hours_spin = QSpinBox()
+        self.hours_spin.setRange(1, 12)
+        self.hours_spin.setValue(8)
+        self.hours_spin.setFixedHeight(36)
+        self.sem_spin = QSpinBox()
+        self.sem_spin.setRange(1, 4)
+        self.sem_spin.setValue(2)
+        self.sem_spin.setFixedHeight(36)
         form.addRow("Nom *:", self.name_input)
         form.addRow("Année académique *:", self.year_input)
         form.addRow("Date début *:", self.start_date)
@@ -429,10 +486,18 @@ class CalendarDialog(QDialog):
         form.addRow("Heures/jour:", self.hours_spin)
         form.addRow("Nombre semestres:", self.sem_spin)
         layout.addLayout(form)
-        btns = QHBoxLayout(); btns.addStretch()
-        btn_c = QPushButton("Annuler"); btn_c.setFixedSize(110,36); btn_c.setStyleSheet("background:#e0e0e0; border:none; border-radius:6px;"); btn_c.clicked.connect(self.reject)
-        btn_ok = QPushButton("✅ Enregistrer"); btn_ok.setFixedSize(140,36); btn_ok.setStyleSheet("background:#3B82F6; color:white; border:none; border-radius:6px; font-weight:bold;"); btn_ok.clicked.connect(self.validate)
-        btns.addWidget(btn_c); btns.addWidget(btn_ok)
+        btns = QHBoxLayout()
+        btns.addStretch()
+        btn_c = QPushButton("Annuler")
+        btn_c.setFixedSize(110, 36)
+        btn_c.setStyleSheet("background:#e0e0e0; border:none; border-radius:6px;")
+        btn_c.clicked.connect(self.reject)
+        btn_ok = QPushButton("✅ Enregistrer")
+        btn_ok.setFixedSize(140, 36)
+        btn_ok.setStyleSheet("background:#3B82F6; color:white; border:none; border-radius:6px; font-weight:bold;")
+        btn_ok.clicked.connect(self.validate)
+        btns.addWidget(btn_c)
+        btns.addWidget(btn_ok)
         layout.addLayout(btns)
 
     def validate(self):
@@ -442,13 +507,14 @@ class CalendarDialog(QDialog):
         self.accept()
 
     def get_data(self):
-        sd = self.start_date.date(); ed = self.end_date.date()
+        sd = self.start_date.date()
+        ed = self.end_date.date()
         return {
-            'name': self.name_input.text().strip(),
-            'academic_year': self.year_input.text().strip(),
-            'start_date': date(sd.year(), sd.month(), sd.day()),
-            'end_date':   date(ed.year(), ed.month(), ed.day()),
-            'hours_per_day': self.hours_spin.value(),
+            'name'          : self.name_input.text().strip(),
+            'academic_year' : self.year_input.text().strip(),
+            'start_date'    : date(sd.year(), sd.month(), sd.day()),
+            'end_date'      : date(ed.year(), ed.month(), ed.day()),
+            'hours_per_day' : self.hours_spin.value(),
             'semester_count': self.sem_spin.value(),
         }
 
@@ -468,11 +534,17 @@ class HolidayDialog(QDialog):
         title = QLabel("🎉 Nouveau Jour Férié")
         title.setStyleSheet("font-size:18px; font-weight:bold;")
         layout.addWidget(title)
-        form = QFormLayout(); form.setSpacing(10)
-        self.name_input  = QLineEdit(); self.name_input.setPlaceholderText("Ex: Fête Nationale"); self.name_input.setFixedHeight(36)
-        self.date_edit   = QDateEdit(QDate.currentDate()); self.date_edit.setCalendarPopup(True); self.date_edit.setFixedHeight(36)
-        self.recurring   = QCheckBox("Récurrent chaque année")
-        self.cal_combo   = QComboBox(); self.cal_combo.setFixedHeight(36)
+        form = QFormLayout()
+        form.setSpacing(10)
+        self.name_input = QLineEdit()
+        self.name_input.setPlaceholderText("Ex: Fête Nationale")
+        self.name_input.setFixedHeight(36)
+        self.date_edit = QDateEdit(QDate.currentDate())
+        self.date_edit.setCalendarPopup(True)
+        self.date_edit.setFixedHeight(36)
+        self.recurring = QCheckBox("Récurrent chaque année")
+        self.cal_combo = QComboBox()
+        self.cal_combo.setFixedHeight(36)
         for c in self.calendars:
             self.cal_combo.addItem(c.name, c.id)
         form.addRow("Nom *:", self.name_input)
@@ -480,10 +552,18 @@ class HolidayDialog(QDialog):
         form.addRow("", self.recurring)
         form.addRow("Calendrier *:", self.cal_combo)
         layout.addLayout(form)
-        btns = QHBoxLayout(); btns.addStretch()
-        btn_c = QPushButton("Annuler"); btn_c.setFixedSize(110,36); btn_c.setStyleSheet("background:#e0e0e0; border:none; border-radius:6px;"); btn_c.clicked.connect(self.reject)
-        btn_ok = QPushButton("✅ Enregistrer"); btn_ok.setFixedSize(140,36); btn_ok.setStyleSheet("background:#F59E0B; color:white; border:none; border-radius:6px; font-weight:bold;"); btn_ok.clicked.connect(self.validate)
-        btns.addWidget(btn_c); btns.addWidget(btn_ok)
+        btns = QHBoxLayout()
+        btns.addStretch()
+        btn_c = QPushButton("Annuler")
+        btn_c.setFixedSize(110, 36)
+        btn_c.setStyleSheet("background:#e0e0e0; border:none; border-radius:6px;")
+        btn_c.clicked.connect(self.reject)
+        btn_ok = QPushButton("✅ Enregistrer")
+        btn_ok.setFixedSize(140, 36)
+        btn_ok.setStyleSheet("background:#F59E0B; color:white; border:none; border-radius:6px; font-weight:bold;")
+        btn_ok.clicked.connect(self.validate)
+        btns.addWidget(btn_c)
+        btns.addWidget(btn_ok)
         layout.addLayout(btns)
 
     def validate(self):
@@ -495,19 +575,19 @@ class HolidayDialog(QDialog):
     def get_data(self):
         d = self.date_edit.date()
         return {
-            'name': self.name_input.text().strip(),
-            'date': date(d.year(), d.month(), d.day()),
+            'name'        : self.name_input.text().strip(),
+            'date'        : date(d.year(), d.month(), d.day()),
             'is_recurring': self.recurring.isChecked(),
-            'calendar_id': self.cal_combo.currentData(),
+            'calendar_id' : self.cal_combo.currentData(),
         }
 
 
 class VacationDialog(QDialog):
     TYPES = {
-        "Vacances de Noël":     VacationTypeEnum.NOEL,
-        "Vacances de Pâques":   VacationTypeEnum.PAQUES,
-        "Vacances d'été":       VacationTypeEnum.ETE,
-        "Vacances de Toussaint":VacationTypeEnum.TOUSSAINT,
+        "Vacances de Noël"     : VacationTypeEnum.NOEL,
+        "Vacances de Pâques"   : VacationTypeEnum.PAQUES,
+        "Vacances d'été"       : VacationTypeEnum.ETE,
+        "Vacances de Toussaint": VacationTypeEnum.TOUSSAINT,
     }
 
     def __init__(self, parent=None, calendars=None):
@@ -524,12 +604,22 @@ class VacationDialog(QDialog):
         title = QLabel("🏖️ Nouvelle Période de Vacances")
         title.setStyleSheet("font-size:18px; font-weight:bold;")
         layout.addWidget(title)
-        form = QFormLayout(); form.setSpacing(10)
-        self.name_input = QLineEdit(); self.name_input.setPlaceholderText("Ex: Vacances de Noël 2025"); self.name_input.setFixedHeight(36)
-        self.type_combo = QComboBox(); self.type_combo.setFixedHeight(36); self.type_combo.addItems(list(self.TYPES.keys()))
-        self.start_date = QDateEdit(QDate.currentDate()); self.start_date.setCalendarPopup(True); self.start_date.setFixedHeight(36)
-        self.end_date   = QDateEdit(QDate.currentDate().addDays(7)); self.end_date.setCalendarPopup(True); self.end_date.setFixedHeight(36)
-        self.cal_combo  = QComboBox(); self.cal_combo.setFixedHeight(36)
+        form = QFormLayout()
+        form.setSpacing(10)
+        self.name_input = QLineEdit()
+        self.name_input.setPlaceholderText("Ex: Vacances de Noël 2025")
+        self.name_input.setFixedHeight(36)
+        self.type_combo = QComboBox()
+        self.type_combo.setFixedHeight(36)
+        self.type_combo.addItems(list(self.TYPES.keys()))
+        self.start_date = QDateEdit(QDate.currentDate())
+        self.start_date.setCalendarPopup(True)
+        self.start_date.setFixedHeight(36)
+        self.end_date = QDateEdit(QDate.currentDate().addDays(7))
+        self.end_date.setCalendarPopup(True)
+        self.end_date.setFixedHeight(36)
+        self.cal_combo = QComboBox()
+        self.cal_combo.setFixedHeight(36)
         for c in self.calendars:
             self.cal_combo.addItem(c.name, c.id)
         form.addRow("Nom *:", self.name_input)
@@ -538,10 +628,18 @@ class VacationDialog(QDialog):
         form.addRow("Fin *:", self.end_date)
         form.addRow("Calendrier *:", self.cal_combo)
         layout.addLayout(form)
-        btns = QHBoxLayout(); btns.addStretch()
-        btn_c = QPushButton("Annuler"); btn_c.setFixedSize(110,36); btn_c.setStyleSheet("background:#e0e0e0; border:none; border-radius:6px;"); btn_c.clicked.connect(self.reject)
-        btn_ok = QPushButton("✅ Enregistrer"); btn_ok.setFixedSize(140,36); btn_ok.setStyleSheet("background:#8B5CF6; color:white; border:none; border-radius:6px; font-weight:bold;"); btn_ok.clicked.connect(self.validate)
-        btns.addWidget(btn_c); btns.addWidget(btn_ok)
+        btns = QHBoxLayout()
+        btns.addStretch()
+        btn_c = QPushButton("Annuler")
+        btn_c.setFixedSize(110, 36)
+        btn_c.setStyleSheet("background:#e0e0e0; border:none; border-radius:6px;")
+        btn_c.clicked.connect(self.reject)
+        btn_ok = QPushButton("✅ Enregistrer")
+        btn_ok.setFixedSize(140, 36)
+        btn_ok.setStyleSheet("background:#8B5CF6; color:white; border:none; border-radius:6px; font-weight:bold;")
+        btn_ok.clicked.connect(self.validate)
+        btns.addWidget(btn_c)
+        btns.addWidget(btn_ok)
         layout.addLayout(btns)
 
     def validate(self):
@@ -551,11 +649,12 @@ class VacationDialog(QDialog):
         self.accept()
 
     def get_data(self):
-        sd = self.start_date.date(); ed = self.end_date.date()
+        sd = self.start_date.date()
+        ed = self.end_date.date()
         return {
-            'name': self.name_input.text().strip(),
-            'type': self.TYPES[self.type_combo.currentText()],
-            'start_date': date(sd.year(), sd.month(), sd.day()),
-            'end_date':   date(ed.year(), ed.month(), ed.day()),
+            'name'       : self.name_input.text().strip(),
+            'type'       : self.TYPES[self.type_combo.currentText()],
+            'start_date' : date(sd.year(), sd.month(), sd.day()),
+            'end_date'   : date(ed.year(), ed.month(), ed.day()),
             'calendar_id': self.cal_combo.currentData(),
         }
